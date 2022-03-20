@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'adminPage.dart';
 
+import 'package:customizable_app/services/userService.dart';
+
 class Login extends StatefulWidget{
   @override
   _LoginState createState() => _LoginState();
@@ -37,6 +39,7 @@ class _LoginState extends State<Login>{
               child: Text("Login In"),
               onPressed: () {
                 if( _id.text.toString() == "1"  ){
+                  print(UserService().getAllDataByID("1"));
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> AdminPage(),
                   ),
                   );
