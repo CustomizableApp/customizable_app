@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:customizable_app/service/user_service.dart';
+import 'package:customizable_app/service/user.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -18,21 +20,34 @@ class _AdminPageState extends State<AdminPage> {
         centerTitle: true,
       ),
       body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LabeledCheckbox(
-              label: 'This is the label text',
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              value: _isSelected,
-              onChanged: (bool newValue) {
-                setState(() {
-                  _isSelected = newValue;
-                });
-              },
-            )
-          ],
-        ),
+        child: FutureBuilder(
+                future: UserService.instance.getUsers(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    List<User> users = [];
+                    List datas = snapshot.data.data["users"];
+
+                    for (int i = 0; i < datas.length; i++) {
+                      users.add(User.fromMap(datas[i]));
+                    }
+                    return ListView.builder(
+                      itemCount: users.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Row(
+                          children: [
+                            Text(users[index].name! + " "),
+                            Text(users[index].surname! + " "),
+                            Text(users[index].type! + " "),
+                            Text(users[index].id!)
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
       ),
     );
   }
