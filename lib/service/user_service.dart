@@ -19,9 +19,9 @@ class UserService {
     return response;
   }
 
-  Future<Response> createUser(String name, String surname) {
-    Map<String, dynamic> data = {"name": name, "surname": surname};
-    Future<Response> response = Dio().post(apiUrl + "/createUser", data: data);
+  Future<Response> editCanChange(String userID, String foodName) {
+    Map<String, dynamic> data = {"userid": userID, "name": foodName};
+    Future<Response> response = Dio().put(apiUrl + "/editCanChangePut", data: data);
     return response;
   }
 
