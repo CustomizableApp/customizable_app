@@ -25,6 +25,11 @@ class UserService {
     return response;
   }
 
+  Future<Response> getFoodNames() {
+    Future<Response> response = Dio().get(apiUrl + "/getFoodNames");
+    return response;
+  }
+
   Future<Response> deleteUser(String name) {
     Map<String, dynamic> data = {"name": name};
     Future<Response> response =

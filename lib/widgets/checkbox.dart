@@ -3,14 +3,16 @@ import 'package:customizable_app/service/user_service.dart';
 
 class CheckBoxListTileExample extends StatefulWidget {
   List users =[];
-  CheckBoxListTileExample(List list){
+  String foodName="";
+  CheckBoxListTileExample(List list,String foodName){
     this.users=list;
+    this.foodName=foodName;
   }
   
   
   @override
   _CheckBoxListTileExampleState createState() =>
-      _CheckBoxListTileExampleState(users);
+      _CheckBoxListTileExampleState(users,foodName);
 
       
       
@@ -19,9 +21,11 @@ class CheckBoxListTileExample extends StatefulWidget {
 class _CheckBoxListTileExampleState extends State<CheckBoxListTileExample> {
   List<Data> _data =[];
   List users=[];
+  String foodName="";
   int i=0;
-  _CheckBoxListTileExampleState(List users){
+  _CheckBoxListTileExampleState(List users,String foodName){
     this.users=users;
+    this.foodName=foodName;
   }
   
 
@@ -44,7 +48,7 @@ class _CheckBoxListTileExampleState extends State<CheckBoxListTileExample> {
             ),
             value: _data[index].isSelected,
             onChanged: (val) {
-              UserService.instance.editCanChange(users[index+1].id, "su");
+              UserService.instance.editCanChange(users[index+1].id, foodName);
               setState(
                 () {
                   _data[index].isSelected = val!;
