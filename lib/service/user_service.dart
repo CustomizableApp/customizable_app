@@ -44,4 +44,17 @@ class UserService {
         Dio().put(AppConstants.apiUrl + "/updateNameByName", data: data);
     return response;
   }
+
+  recordUser(String? name, String? surname, String id) {
+    Map<String, dynamic> data = {
+      "name": name,
+      "surname": surname,
+      "id": id,
+    };
+    try {
+      Dio().post(AppConstants.apiUrl + "/recordUser", data: data);
+    } catch (e) {
+      print(e);
+    }
+  }
 }
