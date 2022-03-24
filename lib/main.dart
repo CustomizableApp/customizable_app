@@ -1,7 +1,18 @@
-import 'package:customizable_app/pages/login.dart';
+import 'package:customizable_app/firebase_options.dart';
+import 'package:customizable_app/login/login_page.dart';
+import 'package:customizable_app/pages/adminPage.dart';
+import 'package:customizable_app/service/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  AuthenticationService.authInit();
   runApp(const MyApp());
 }
 
@@ -25,8 +36,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: FirebaseAuth.instance.currentUser?.uid == null
+          ? const LoginPage()
+          : const AdminPage(), //HOMEPAGE
     );
   }
 }
-

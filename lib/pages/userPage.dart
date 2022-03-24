@@ -1,37 +1,34 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserPage extends StatefulWidget{
+class UserPage extends StatefulWidget {
   @override
   _UserPageState createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage>{
+class _UserPageState extends State<UserPage> {
   bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("User"),
+        title: const Text("User"),
         centerTitle: true,
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LabeledCheckbox(
-              label: 'This is the label text',
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              value: _isSelected,
-              onChanged: (bool newValue) {
-                setState(() {
-                  _isSelected = newValue;
-                });
-              },
-            )
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LabeledCheckbox(
+            label: 'This is the label text',
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            value: _isSelected,
+            onChanged: (bool newValue) {
+              setState(() {
+                _isSelected = newValue;
+              });
+            },
+          )
+        ],
       ),
     );
   }
