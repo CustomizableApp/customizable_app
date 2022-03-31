@@ -1,5 +1,7 @@
 import 'package:customizable_app/login/register_page.dart';
 import 'package:customizable_app/pages/adminPage.dart';
+import 'package:customizable_app/pages/userPage.dart';
+import 'package:customizable_app/pages/managerPage.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -107,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                           return Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const AdminPage()));
+                                  builder: (context) => const managerPage()));
                         } else {
                           //TODO ERROR
                         }

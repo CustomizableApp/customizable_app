@@ -4,16 +4,22 @@ import 'package:customizable_app/service/user.dart';
 
 class CheckBoxListTile extends StatefulWidget {
   List<User>  users =[];
+  int cargoID=0;
+  
 
-
-  CheckBoxListTile(List<User>  list){
+  CheckBoxListTile(List<User>  list, int cargoID){
     this.users=list;
+    this.cargoID=cargoID;
+
   }
   
   
   @override
   _CheckBoxListTileState createState() =>
-      _CheckBoxListTileState(users);
+      _CheckBoxListTileState(users,cargoID);
+
+      
+      
 }
 
 class _CheckBoxListTileState extends State<CheckBoxListTile> {
@@ -22,9 +28,11 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
   int i=0;
   String type="";
   List<User> listedUsers=[];
+  int cargoID=0;
 
-  _CheckBoxListTileState(List<User>  users){
+  _CheckBoxListTileState(List<User>  users,int cargoID){
     this.users=users;
+    this.cargoID=cargoID;
   }
   
 
@@ -46,11 +54,10 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
             ),
             value: _data[index].isSelected,
             onChanged: (val) {
-
                 if(val==true){
-                UserService.instance.createNewAssigner(listedUsers[index].id.toString());
+                UserService.instance.assignCourrier(users[index].id.toString(), cargoID);
               }else{
-                UserService.instance.deleteAssigner(listedUsers[index].id.toString());
+                UserService.instance.removeCourrier(cargoID);
               }
               setState(
                 () {

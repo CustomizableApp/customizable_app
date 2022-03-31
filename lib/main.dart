@@ -1,6 +1,8 @@
 import 'package:customizable_app/firebase_options.dart';
 import 'package:customizable_app/login/login_page.dart';
 import 'package:customizable_app/pages/adminPage.dart';
+import 'package:customizable_app/pages/userPage.dart';
+import 'package:customizable_app/pages/managerPage.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,8 +39,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: FirebaseAuth.instance.currentUser?.uid == null
-          ? const LoginPage()
-          : const AdminPage(), //HOMEPAGE
+          ? const managerPage()
+          : const managerPage(), //HOMEPAGE
     );
   }
 }

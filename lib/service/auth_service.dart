@@ -55,7 +55,7 @@ class AuthenticationService {
         password: password,
       );
       await UserService.instance
-          .recordUser(name, surname, userCredential.user!.uid);
+          .createNewUser(name, surname, userCredential.user!.uid);
 
       if (userCredential.user?.uid != null) {
         isSignedIn = true;

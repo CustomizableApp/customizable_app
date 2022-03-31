@@ -4,26 +4,24 @@ class User {
   String? id;
   String? name;
   String? surname;
-  String? type;
+
 
   User({
     this.id,
     this.name,
     this.surname,
-    this.type,
   });
 
   User copyWith({
     String? id,
     String? name,
     String? surname,
-    String? type,
+
   }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
       surname: surname ?? this.surname,
-      type: type ?? this.type
     );
   }
 
@@ -32,16 +30,14 @@ class User {
       'id': id,
       'name': name,
       'surname': surname,
-      'type': type,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'],
-      name: map['name'],
-      surname: map['surname'],
-      type:map['type'],
+      id: map['UserID'],
+      name: map['Name'],
+      surname: map['Surname'],
     );
   }
 
@@ -50,7 +46,7 @@ class User {
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   @override
-  String toString() => 'User(id: $id, name: $name, surname: $surname, type: $type)';
+  String toString() => 'User(id: $id, name: $name, surname: $surname)';
 
   @override
   bool operator ==(Object other) {
@@ -59,12 +55,11 @@ class User {
     return other is User &&
         other.id == id &&
         other.name == name &&
-        other.surname == surname &&
-        other.type ==type;
+        other.surname == surname;
 
 
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ surname.hashCode ^ type.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ surname.hashCode;
 }
