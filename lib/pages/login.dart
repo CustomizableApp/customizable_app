@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'adminPage.dart';
+import 'admin_page.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

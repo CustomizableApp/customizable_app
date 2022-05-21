@@ -1,4 +1,4 @@
-import 'package:customizable_app/pages/adminPage.dart';
+import 'package:customizable_app/pages/admin_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 

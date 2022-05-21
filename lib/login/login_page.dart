@@ -1,5 +1,5 @@
 import 'package:customizable_app/login/register_page.dart';
-import 'package:customizable_app/pages/adminPage.dart';
+import 'package:customizable_app/pages/admin_page.dart';
 import 'package:customizable_app/pages/userPage.dart';
 import 'package:customizable_app/pages/managerPage.dart';
 import 'package:customizable_app/service/auth_service.dart';
