@@ -1,4 +1,4 @@
-import 'package:customizable_app/pages/admin_page.dart';
+import 'package:customizable_app/pages/manager_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -167,7 +167,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               return Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const AdminPage()));
+                                      builder: (context) =>
+                                          const ManagerPage()));
                             } else {
                               //TODO ERROR
                             }

@@ -1,6 +1,5 @@
+import 'package:customizable_app/pages/manager_page.dart';
 import 'package:flutter/material.dart';
-
-import 'admin_page.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -38,7 +37,7 @@ class _LoginState extends State<Login> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AdminPage(),
+                    builder: (context) => const ManagerPage(),
                   ),
                 );
               }

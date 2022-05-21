@@ -18,21 +18,27 @@ class UserService {
     Future<Response> response = Dio().get(AppConstants.apiUrl + "/getUsers");
     return response;
   }
+
   Future<Response> getAllUsers() {
-    Map<String, dynamic> data = {"UserID": AuthenticationService.instance.getUserId()};
-    Future<Response> response = Dio().post(AppConstants.apiUrl + "/GetAllUsers",data:data);
+    Map<String, dynamic> data = {
+      "UserID": AuthenticationService.instance.getUserId()
+    };
+    Future<Response> response =
+        Dio().post(AppConstants.apiUrl + "/GetAllUsers", data: data);
     return response;
   }
 
   Future<Response> getFoodNameByCanChangeID(String userID) {
     Map<String, dynamic> data = {"userid": userID};
-    Future<Response> response = Dio().put(AppConstants.apiUrl + "/getFoodNameByCanChangeID", data:data);
+    Future<Response> response = Dio()
+        .put(AppConstants.apiUrl + "/getFoodNameByCanChangeID", data: data);
     return response;
   }
 
   Future<Response> getFoodByUserID(String userID) {
     Map<String, dynamic> data = {"userid": userID};
-    Future<Response> response = Dio().put(AppConstants.apiUrl + "/getFoodByUserID", data:data);
+    Future<Response> response =
+        Dio().put(AppConstants.apiUrl + "/getFoodByUserID", data: data);
     return response;
   }
 
@@ -43,12 +49,17 @@ class UserService {
     return response;
   }
 
-   Future<Response> assignCourrier(String userID, int cargoID) {
-    Map<String, dynamic> data = {"CourrierID": userID, "CargoID": cargoID,"AssignerID":AuthenticationService.instance.getUserId()};
+  Future<Response> assignCourrier(String userID, int cargoID) {
+    Map<String, dynamic> data = {
+      "CourrierID": userID,
+      "CargoID": cargoID,
+      "AssignerID": AuthenticationService.instance.getUserId()
+    };
     Future<Response> response =
         Dio().put(AppConstants.apiUrl + "/AssignCourrier", data: data);
     return response;
   }
+
   Future<Response> removeCourrier(int cargoID) {
     Map<String, dynamic> data = {"CargoID": cargoID};
     Future<Response> response =
@@ -102,6 +113,7 @@ class UserService {
       print(e);
     }
   }
+
   createNewUser(String? name, String? surname, String id) {
     Map<String, dynamic> data = {
       "Name": name,
@@ -110,16 +122,6 @@ class UserService {
     };
     try {
       Dio().post(AppConstants.apiUrl + "/CreateNewUser", data: data);
-    } catch (e) {
-      print(e);
-    }
-  }
-  createNewAssigner(String id) {
-    Map<String, dynamic> data = {
-      "AssignerID": id,
-    };
-    try {
-      Dio().post(AppConstants.apiUrl + "/InsertAssigner", data: data);
     } catch (e) {
       print(e);
     }
