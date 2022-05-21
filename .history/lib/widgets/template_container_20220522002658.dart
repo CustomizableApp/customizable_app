@@ -20,9 +20,7 @@ class TemplateContainer extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.8,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Center(
-              child: Text(templateName),
-            ),
+            child: Center(child: Text(templateName)),
           ),
         ),
       ),
