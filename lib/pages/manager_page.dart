@@ -31,8 +31,8 @@ class _ManagerPageState extends State<ManagerPage> {
             FutureBuilder(
               future: UserService.instance.getTemplatesByUserId("sehaId"),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                List<TemplateModel> data = snapshot.data;
                 if (snapshot.hasData) {
+                  List<TemplateModel> data = snapshot.data;
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: data.length,
