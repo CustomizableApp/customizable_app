@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../widgets/template_container.dart';
 
-class ManagerPage extends StatefulWidget {
-  const ManagerPage({Key? key}) : super(key: key);
+class TemplatePage extends StatefulWidget {
+  const TemplatePage({Key? key}) : super(key: key);
 
   @override
-  State<ManagerPage> createState() => _ManagerPageState();
+  State<TemplatePage> createState() => _TemplatePageState();
 }
 
-class _ManagerPageState extends State<ManagerPage> {
+class _TemplatePageState extends State<TemplatePage> {
   @override
   void initState() {
     // TODO: implement initState
@@ -22,7 +22,7 @@ class _ManagerPageState extends State<ManagerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Manager"),
+        title: const Text("Template Page"),
         centerTitle: true,
       ),
       body: Center(
@@ -37,7 +37,7 @@ class _ManagerPageState extends State<ManagerPage> {
                     shrinkWrap: true,
                     itemCount: data.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return TemplateContainer(templateName: data[index].name);
+                      return TemplateContainer(template: data[index]);
                     },
                   );
                 } else {

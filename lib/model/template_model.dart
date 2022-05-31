@@ -1,24 +1,37 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:customizable_app/model/record_model.dart';
+import 'package:customizable_app/model/tool_model.dart';
+
 class TemplateModel {
   String id;
   String name;
   bool isFeed;
+  List<ToolModel>? tools;
+  List<RecordModel>? records;
   TemplateModel({
     required this.id,
     required this.name,
     required this.isFeed,
+    this.tools,
+    this.records,
   });
 
   TemplateModel copyWith({
     String? id,
     String? name,
     bool? isFeed,
+    List<ToolModel>? tools,
+    List<RecordModel>? records,
   }) {
     return TemplateModel(
       id: id ?? this.id,
       name: name ?? this.name,
       isFeed: isFeed ?? this.isFeed,
+      tools: tools ?? this.tools,
+      records: records ?? this.records,
     );
   }
 
@@ -27,6 +40,8 @@ class TemplateModel {
       'id': id,
       'name': name,
       'isFeed': isFeed,
+      'tools': tools?.map((x) => x.toMap()).toList(),
+      'records': records?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -44,7 +59,9 @@ class TemplateModel {
       TemplateModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'TemplateModel(id: $id, name: $name, isFeed: $isFeed)';
+  String toString() {
+    return 'TemplateModel(id: $id, name: $name, isFeed: $isFeed, tools: $tools, records: $records)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -53,9 +70,17 @@ class TemplateModel {
     return other is TemplateModel &&
         other.id == id &&
         other.name == name &&
-        other.isFeed == isFeed;
+        other.isFeed == isFeed &&
+        listEquals(other.tools, tools) &&
+        listEquals(other.records, records);
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ isFeed.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        isFeed.hashCode ^
+        tools.hashCode ^
+        records.hashCode;
+  }
 }

@@ -1,4 +1,4 @@
-import 'package:customizable_app/pages/manager_page.dart';
+import 'package:customizable_app/pages/template_page.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ManagerPage(),
+                    builder: (context) => const TemplatePage(),
                   ),
                 );
               }

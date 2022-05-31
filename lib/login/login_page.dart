@@ -1,5 +1,5 @@
 import 'package:customizable_app/login/register_page.dart';
-import 'package:customizable_app/pages/manager_page.dart';
+import 'package:customizable_app/pages/template_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           return Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ManagerPage()));
+                                  builder: (context) => const TemplatePage()));
                         } else {
                           //TODO ERROR
                         }

@@ -1,4 +1,4 @@
-import 'package:customizable_app/pages/manager_page.dart';
+import 'package:customizable_app/pages/template_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -168,7 +168,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const ManagerPage()));
+                                          const TemplatePage()));
                             } else {
                               //TODO ERROR
                             }
