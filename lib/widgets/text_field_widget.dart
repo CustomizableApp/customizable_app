@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //TODO
 //BURASI STFULL IKEN  SADECE CREATESTATE DEN CREATETRIGGERA ULASILIYOR O DURUMDA DA BASTAN OLUSTRUDUGU ICIN (?) CONTROLLER BOS OLUYOR VERIYI DBYE ATAMIYORUM
 
-class TextFieldWidget extends StatelessWidget {
+class TextFieldWidget extends StatefulWidget {
   TextFieldWidget(
     this.id,
     this.name,
@@ -15,25 +15,11 @@ class TextFieldWidget extends StatelessWidget {
   final String name;
   final String? text;
   final TextEditingController controller;
-
   bool hasChanged = false;
   bool isCreated = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(name),
-        TextFormField(
-          controller: controller,
-          onChanged: (value) {
-            controller.text = value;
-            print(controller.text);
-          },
-        ),
-      ],
-    );
-  }
+  _TextFieldWidgetState createState() => _TextFieldWidgetState();
 
   void createTrigger(String recordId, String toolId) {
     if (!isCreated) {
@@ -58,4 +44,18 @@ class TextFieldWidget extends StatelessWidget {
   }
 
   updateData() {}
+}
+
+class _TextFieldWidgetState extends State<TextFieldWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(widget.name),
+        TextFormField(
+          controller: widget.controller,
+        ),
+      ],
+    );
+  }
 }
