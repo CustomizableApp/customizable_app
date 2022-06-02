@@ -12,4 +12,17 @@ class DataModel extends ToolModel {
     required this.dataId,
     required this.fieldId,
   }) : super(id: toolId, name: name, type: type);
+
+  factory DataModel.fromMap(Map<String, dynamic> map) {
+    return DataModel(
+      toolId: map["tool"]["id"],
+      name: map["tool"]["name"],
+      type: int.parse(map["tool"]["type"]),
+      dataId: map['id'] ?? '',
+      fieldId: map['field_id'] ?? '',
+    );
+  }
+
+  factory DataModel.fromJson(String source) =>
+      DataModel.fromMap(json.decode(source));
 }

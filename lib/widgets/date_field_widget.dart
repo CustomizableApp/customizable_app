@@ -14,14 +14,31 @@ class DateIntervalWidget extends StatefulWidget {
   final String name;
   DateTime firstDate;
   DateTime secondDate;
+  bool hasChanged = false;
+  bool isCreated = false;
 
+  void createTrigger() {
+    if (!isCreated) {
+      createData();
+    }
+  }
+
+  void updateTrigger() {
+    if (isCreated && hasChanged) {
+      updateData();
+    }
+  }
+
+  void createData() {
+    print("dateField");
+  }
+
+  updateData() {}
   @override
   _DateIntervalWidgetState createState() => _DateIntervalWidgetState();
 }
 
 class _DateIntervalWidgetState extends State<DateIntervalWidget> {
-  bool hasChanged = false;
-  bool isCreated = false;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -94,22 +111,4 @@ class _DateIntervalWidgetState extends State<DateIntervalWidget> {
     to = DateTime(to.year, to.month, to.day);
     return (to.difference(from).inHours / 24).round();
   }
-
-  void createTrigger() {
-    if (!isCreated) {
-      createData();
-    }
-  }
-
-  void updateTrigger() {
-    if (isCreated && hasChanged) {
-      updateData();
-    }
-  }
-
-  void createData() {
-    print("dateField");
-  }
-
-  updateData() {}
 }

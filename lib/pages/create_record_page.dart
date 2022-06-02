@@ -1,5 +1,6 @@
 import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/service/field_service.dart';
+import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                         DateTime(2000, 1, 1),
                         DateTime(2000, 1, 1));
 
-                    functions
-                        .add(dateIntervalWidget.createState().createTrigger);
+                    functions.add(dateIntervalWidget.createTrigger);
 
                     return dateIntervalWidget;
 
@@ -77,11 +77,14 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
         onPressed: () async {
           String? recordId = await FieldService.instance
               .createRecord(widget.recordName, widget.template.id);
+
           int index = 0;
           for (Function function in functions) {
             function.call(recordId, widget.template.tools![index].id);
             index++;
           }
+          ToastUtil.toastMessage(context, "Record created.", "OK");
+          Navigator.pop(context);
         },
       ),
     );

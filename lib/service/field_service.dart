@@ -1,3 +1,4 @@
+import 'package:customizable_app/model/data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
 import 'package:dio/dio.dart';
@@ -30,6 +31,53 @@ class FieldService {
     }
 
     return tools;
+  }
+
+  Future<List<DataModel>> getFieldIdAndTool(String recordId) async {
+    Map<String, dynamic> data = {
+      "recordId": recordId,
+    };
+    List<DataModel> datas = List.empty(growable: true);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getFieldIdAndTool", queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List dataList = dataMap["DB_data"];
+    //TODO BETTER SOLUTION
+    for (int i = 0; i < dataList.length; i++) {
+      datas.add(DataModel.fromMap(dataList[i]));
+    }
+    print(datas);
+    return datas;
+  }
+
+  Future<String> getTextFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+    String text = "";
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getTextFieldDataById",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    text = dataMap["DB_text_field"][0]["text"];
+    print(text);
+    return text;
+  }
+
+  Future<List<DateTime>> getIntervalDateFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+
+    List<DateTime> dateList = List.empty(growable: true);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getIntervalDateFieldDataById",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    dateList.add(DateTime.parse(dataMap["DB_interval_datefield"][0]["date1"]));
+    dateList.add(DateTime.parse(dataMap["DB_interval_datefield"][0]["date2"]));
+
+    return dateList;
   }
 
   Future<String?> createRecord(String name, String templateId) async {

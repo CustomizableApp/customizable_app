@@ -1,4 +1,6 @@
 import 'package:customizable_app/model/record_model.dart';
+import 'package:customizable_app/pages/show_record_page.dart';
+import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
 //TODO UI IMPROVEMENTS
@@ -13,7 +15,12 @@ class RecordContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () async {},
+        onTap: () async {
+          record.datas =
+              await FieldService.instance.getFieldIdAndTool(record.id);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ShowRecordPage(record)));
+        },
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(),
