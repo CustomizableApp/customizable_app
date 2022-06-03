@@ -95,6 +95,25 @@ class FieldService {
     return dateList;
   }
 
+  Future<bool> updateIntervalDateFieldData(
+      String fieldId, DateTime firstDate, DateTime secondDate) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+      //db de datetime olarak updatelenmeli
+      "date1": firstDate.toString(),
+      "date2": secondDate.toString(),
+    };
+    bool status = false;
+    Response response = await Dio().post(
+        AppConstants.apiUrl + "/updateIntervalDateFieldDataByFieldId",
+        data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
+  }
+
   Future<String?> createRecord(String name, String templateId) async {
     //TODO CONSTANT VALUE HERE
     String creatorId = "sehaId"; //user serviceten alinacak

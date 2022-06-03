@@ -59,7 +59,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                         widget.template.tools![index].id,
                         widget.template.tools![index].name,
                         DateTime(2000, 1, 1),
-                        DateTime(2000, 1, 1));
+                        DateTime(2000, 1, 1),
+                        null);
 
                     functions.add(dateIntervalWidget.createTrigger);
 

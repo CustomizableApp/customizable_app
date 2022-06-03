@@ -49,11 +49,12 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                               TextEditingController();
                           controller.text = text;
                           TextFieldWidget textFieldWidget = TextFieldWidget(
-                              widget.record.datas![index].id,
-                              widget.record.datas![index].name,
-                              widget.record.datas![index].fieldId,
-                              text,
-                              controller);
+                            widget.record.datas![index].id,
+                            widget.record.datas![index].name,
+                            widget.record.datas![index].fieldId,
+                            text,
+                            controller,
+                          );
 
                           functions.add(textFieldWidget.updateTrigger);
                           return textFieldWidget;
@@ -75,10 +76,12 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                           List<DateTime> dateList = snapshot.data;
                           DateIntervalWidget dateIntervalWidget =
                               DateIntervalWidget(
-                                  widget.record.datas![index].id,
-                                  widget.record.datas![index].name,
-                                  dateList[0],
-                                  dateList[1]);
+                            widget.record.datas![index].id,
+                            widget.record.datas![index].name,
+                            dateList[0],
+                            dateList[1],
+                            widget.record.datas![index].fieldId,
+                          );
 
                           functions.add(dateIntervalWidget.updateTrigger);
 
