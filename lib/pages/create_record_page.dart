@@ -48,6 +48,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                         widget.template.tools![index].id,
                         widget.template.tools![index].name,
                         null,
+                        "",
                         controller);
 
                     functions.add(textFieldWidget.createTrigger);
@@ -83,6 +84,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
             function.call(recordId, widget.template.tools![index].id);
             index++;
           }
+          functions.clear();
           ToastUtil.toastMessage(context, "Record created.", "OK");
           Navigator.pop(context);
         },

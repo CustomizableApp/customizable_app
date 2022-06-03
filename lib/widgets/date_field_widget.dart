@@ -1,3 +1,4 @@
+import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -12,14 +13,15 @@ class DateIntervalWidget extends StatefulWidget {
   }) : super(key: key);
   final String id;
   final String name;
+  //THEY NEED TO BE NULLABLE
   DateTime firstDate;
   DateTime secondDate;
   bool hasChanged = false;
   bool isCreated = false;
 
-  void createTrigger() {
+  void createTrigger(String recordId, String toolId) {
     if (!isCreated) {
-      createData();
+      createData(recordId, toolId);
     }
   }
 
@@ -29,8 +31,14 @@ class DateIntervalWidget extends StatefulWidget {
     }
   }
 
-  void createData() {
-    print("dateField");
+  Future<void> createData(String recordId, String toolId) async {
+    String? dataId = await FieldService.instance.createData(recordId, toolId);
+    if (dataId != null) {
+      String? intervalDateFieldId = await FieldService.instance
+          .createIntervalDateField(dataId, firstDate, secondDate);
+      await FieldService.instance
+          .updateDataFieldId(dataId, intervalDateFieldId!);
+    }
   }
 
   updateData() {}

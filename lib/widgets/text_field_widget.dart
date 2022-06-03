@@ -1,5 +1,4 @@
 import 'package:customizable_app/service/field_service.dart';
-import 'package:customizable_app/utils/toast_util.dart';
 import 'package:flutter/material.dart';
 //TODO
 //BURASI STFULL IKEN  SADECE CREATESTATE DEN CREATETRIGGERA ULASILIYOR O DURUMDA DA BASTAN OLUSTRUDUGU ICIN (?) CONTROLLER BOS OLUYOR VERIYI DBYE ATAMIYORUM
@@ -8,13 +7,15 @@ class TextFieldWidget extends StatefulWidget {
   TextFieldWidget(
     this.id,
     this.name,
+    this.fieldId,
     this.text,
     this.controller, {
     Key? key,
   }) : super(key: key);
   final String id;
   final String name;
-  final String? text;
+  String text;
+  String? fieldId;
   final TextEditingController controller;
   bool hasChanged = false;
   bool isCreated = false;
@@ -29,14 +30,13 @@ class TextFieldWidget extends StatefulWidget {
   }
 
   void updateTrigger() {
-    if (isCreated && hasChanged) {
-      updateData();
-    }
+    //if (isCreated && hasChanged) {
+    updateData(fieldId!);
+    //}
   }
 
   Future<void> createData(String recordId, String toolId) async {
     String? dataId = await FieldService.instance.createData(recordId, toolId);
-    print(controller.text);
     if (dataId != null) {
       String? textFieldId =
           await FieldService.instance.createTextField(dataId, controller.text);
@@ -44,7 +44,9 @@ class TextFieldWidget extends StatefulWidget {
     }
   }
 
-  updateData() {}
+  updateData(String fieldId) async {
+    await FieldService.instance.updateTextFieldData(fieldId, controller.text);
+  }
 }
 
 class _TextFieldWidgetState extends State<TextFieldWidget> {

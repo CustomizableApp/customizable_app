@@ -60,8 +60,23 @@ class FieldService {
         queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
     text = dataMap["DB_text_field"][0]["text"];
-    print(text);
     return text;
+  }
+
+  Future<bool> updateTextFieldData(String fieldId, String text) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+      "text": text,
+    };
+    bool status = false;
+    Response response = await Dio().post(
+        AppConstants.apiUrl + "/updateTextFieldDataByFieldId",
+        data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
   }
 
   Future<List<DateTime>> getIntervalDateFieldData(String fieldId) async {
@@ -118,6 +133,22 @@ class FieldService {
     Response response =
         await Dio().post(AppConstants.apiUrl + "/createTextField", data: data);
     String id = response.data["insert_DB_text_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<String?> createIntervalDateField(
+      String dataId, DateTime firstDate, DateTime secondDate) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+      //db de datetime olarak updatelenmeli
+      "date1": firstDate.toString(),
+      "date2": secondDate.toString(),
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createIntervalDateField", data: data);
+    String id =
+        response.data["insert_DB_interval_datefield"]["returning"][0]["id"];
     return id;
   }
 
