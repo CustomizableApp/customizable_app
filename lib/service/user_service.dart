@@ -1,6 +1,7 @@
 import 'package:customizable_app/core/app_contants.dart';
 import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/service/auth_service.dart';
+import 'package:customizable_app/service/user.dart';
 import 'package:dio/dio.dart';
 
 class UserService {
@@ -15,18 +16,15 @@ class UserService {
     return _instance;
   }
 
-  Future<Response> getUsers() {
-    Future<Response> response = Dio().get(AppConstants.apiUrl + "/getUsers");
-    return response;
-  }
+  Future<List<UserModel>> getUsers() async {
+    List<UserModel> users = List.empty(growable: true);
+    Response response = await Dio().get(AppConstants.apiUrl + "/getUsers");
 
-  Future<Response> getAllUsers() {
-    Map<String, dynamic> data = {
-      "UserID": AuthenticationService.instance.getUserId()
-    };
-    Future<Response> response =
-        Dio().post(AppConstants.apiUrl + "/GetAllUsers", data: data);
-    return response;
+    List dataList = response.data["DB_user"];
+    for (int i = 0; i < dataList.length; i++) {
+      users.add(UserModel.fromMap(dataList[i]));
+    }
+    return users;
   }
 
   Future<List<TemplateModel>> getTemplatesByUserId(String userId) async {

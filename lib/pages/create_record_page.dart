@@ -1,4 +1,5 @@
 import 'package:customizable_app/model/template_model.dart';
+import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
@@ -86,8 +87,17 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
             index++;
           }
           functions.clear();
-          ToastUtil.toastMessage(context, "Record created.", "OK");
-          Navigator.pop(context);
+          if (recordId != null) {
+            ToastUtil.toastMessage(context, "Record created.", "OK");
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AssignRolePage(widget.template, recordId),
+              ),
+            );
+          }
+
+          //Navigator.pop(context);
         },
       ),
     );

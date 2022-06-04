@@ -1,5 +1,6 @@
 import 'package:customizable_app/model/data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
+import 'package:customizable_app/model/role_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
 import 'package:dio/dio.dart';
 import '../core/app_contants.dart';
@@ -143,6 +144,42 @@ class FieldService {
     return id;
   }
 
+  Future<bool> assignUserToRole(
+      String recordId, String roleId, String userId) async {
+    Map<String, dynamic> data = {
+      "record_id": recordId,
+      "role_id": roleId,
+      "user_id": userId,
+    };
+    bool status = false;
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createRecordRole", data: data);
+    String? id =
+        response.data["insert_DB_record_role"]["returning"][0]["relation_id"];
+    if (id != null) {
+      status = true;
+    }
+    return status;
+  }
+
+  Future<bool> unAssignUserToRole(
+      String recordId, String roleId, String userId) async {
+    Map<String, dynamic> data = {
+      "record_id": recordId,
+      "role_id": roleId,
+      "user_id": userId,
+    };
+    bool status = false;
+    Response response = await Dio()
+        .delete(AppConstants.apiUrl + "/deleteRecordRole", data: data);
+    String? id =
+        response.data["delete_DB_record_role"]["returning"][0]["role_id"];
+    if (id != null) {
+      status = true;
+    }
+    return status;
+  }
+
   Future<String?> createTextField(String dataId, String text) async {
     Map<String, dynamic> data = {
       "data_id": dataId,
@@ -228,6 +265,22 @@ class FieldService {
   //       return null;
   //   }
   // }
+  Future<List<RoleModel>> getRolesByTemplateId(String templateId) async {
+    Map<String, dynamic> data = {
+      "template_id": templateId,
+    };
+    List<RoleModel> roles = List.empty(growable: true);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getRolesByTemplateId",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List dataList = dataMap["DB_role"];
+
+    for (int i = 0; i < dataList.length; i++) {
+      roles.add(RoleModel.fromMap(dataList[i]));
+    }
+    return roles;
+  }
 
   Future<List<RecordModel>> getRecordsByTemplateId(String templateId) async {
     Map<String, dynamic> data = {

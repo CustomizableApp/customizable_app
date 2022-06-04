@@ -1,7 +1,5 @@
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
-//TODO
-//BURASI STFULL IKEN  SADECE CREATESTATE DEN CREATETRIGGERA ULASILIYOR O DURUMDA DA BASTAN OLUSTRUDUGU ICIN (?) CONTROLLER BOS OLUYOR VERIYI DBYE ATAMIYORUM
 
 class TextFieldWidget extends StatefulWidget {
   TextFieldWidget(
