@@ -24,7 +24,7 @@ class _RecordPageState extends State<RecordPage> {
         actions: [
           IconButton(
               onPressed: () {
-                showMyDialog();
+                createNewRecordDialog();
               },
               icon: const Icon(Icons.add))
         ],
@@ -48,7 +48,7 @@ class _RecordPageState extends State<RecordPage> {
     );
   }
 
-  Future<void> showMyDialog() async {
+  Future<void> createNewRecordDialog() async {
     TextEditingController controller = TextEditingController();
     return showDialog<void>(
       context: context,
