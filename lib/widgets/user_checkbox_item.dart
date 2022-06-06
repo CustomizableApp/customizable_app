@@ -5,10 +5,11 @@ import 'package:customizable_app/utils/toast_util.dart';
 import 'package:flutter/material.dart';
 
 class UserCheckboxItem extends StatefulWidget {
-  UserCheckboxItem(this.roleId, this.user, this.recordId, {Key? key})
+  UserCheckboxItem(this.roleId, this.user, this.recordId, this.isChecked,
+      {Key? key})
       : super(key: key);
   final UserModel user;
-  bool isChecked = false;
+  bool isChecked;
   String roleId;
   String recordId;
 

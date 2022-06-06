@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:customizable_app/model/role_model.dart';
+import 'package:customizable_app/model/template_model.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:customizable_app/model/data_model.dart';
@@ -8,10 +10,12 @@ class RecordModel {
   String id;
   String name;
   List<DataModel>? datas;
+  List<RoleModel>? roles;
 
   RecordModel({
     required this.id,
     required this.name,
+    this.roles,
     this.datas,
   });
 
@@ -35,19 +39,18 @@ class RecordModel {
     };
   }
 
-  factory RecordModel.fromMap(Map<String, dynamic> map) {
+  factory RecordModel.fromMap(
+      Map<String, dynamic> map, TemplateModel template) {
     return RecordModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
+      roles: template.roles,
       // datas:
       //     List<DataModel>.from(map['datas']?.map((x) => DataModel.fromMap(x))),
     );
   }
 
   String toJson() => json.encode(toMap());
-
-  factory RecordModel.fromJson(String source) =>
-      RecordModel.fromMap(json.decode(source));
 
   @override
   String toString() => 'RecordModel(id: $id, name: $name, datas: $datas)';

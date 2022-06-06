@@ -1,7 +1,9 @@
 import 'package:customizable_app/model/data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
+import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
+import 'package:customizable_app/service/user.dart';
 import 'package:dio/dio.dart';
 import '../core/app_contants.dart';
 
@@ -282,9 +284,28 @@ class FieldService {
     return roles;
   }
 
-  Future<List<RecordModel>> getRecordsByTemplateId(String templateId) async {
+  Future<List<String>> getAssignedUsers(String roleId, String recordId) async {
     Map<String, dynamic> data = {
-      "templateId": templateId,
+      "role_id": roleId,
+      "record_id": recordId,
+    };
+    List<String> assignedUsers = List.empty(growable: true);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getAssignedUsers", queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List dataList = dataMap["DB_record_role"];
+
+    //TODO BETTER SOLUTION
+    for (int i = 0; i < dataList.length; i++) {
+      assignedUsers.add(dataList[i]["user_id"]);
+    }
+    return assignedUsers;
+  }
+
+  Future<List<RecordModel>> getRecordsByTemplateId(
+      TemplateModel template) async {
+    Map<String, dynamic> data = {
+      "templateId": template.id,
     };
     List<RecordModel> records = List.empty(growable: true);
     Response response = await Dio().get(
@@ -297,7 +318,7 @@ class FieldService {
     for (int i = 0; i < dataList.length; i++) {
       List list = dataList[i]["Records"];
       for (int j = 0; j < list.length; j++) {
-        records.add(RecordModel.fromMap(list[j]));
+        records.add(RecordModel.fromMap(list[j], template));
       }
     }
     return records;

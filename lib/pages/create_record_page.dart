@@ -1,3 +1,4 @@
+import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
@@ -86,18 +87,27 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
             function.call(recordId, widget.template.tools![index].id);
             index++;
           }
-          functions.clear();
+          // functions.clear();
+
+          //TODO BURASI TOPLANACAK
+
+          List<RecordModel> records = await FieldService.instance
+              .getRecordsByTemplateId(widget.template);
+          Iterable<RecordModel> createdRecordAsList =
+              records.where((element) => element.id == recordId);
+          RecordModel record = createdRecordAsList.first;
+
+          //TODO BURASI TOPLANACAK
+
           if (recordId != null) {
             ToastUtil.toastMessage(context, "Record created.", "OK");
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => AssignRolePage(widget.template, recordId),
+                builder: (context) => AssignRolePage(record),
               ),
             );
           }
-
-          //Navigator.pop(context);
         },
       ),
     );

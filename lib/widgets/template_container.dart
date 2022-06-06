@@ -18,10 +18,10 @@ class TemplateContainer extends StatelessWidget {
         onTap: () async {
           template.tools =
               await FieldService.instance.getToolsByTemplateId(template.id);
-          template.records =
-              await FieldService.instance.getRecordsByTemplateId(template.id);
           template.roles =
               await FieldService.instance.getRolesByTemplateId(template.id);
+          template.records =
+              await FieldService.instance.getRecordsByTemplateId(template);
 
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => RecordPage(template)));

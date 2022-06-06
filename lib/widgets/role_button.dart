@@ -36,8 +36,11 @@ class _RoleButtonState extends State<RoleButton> {
             child: ListView.builder(
               itemCount: widget.userCheckBoxItems.length,
               itemBuilder: (BuildContext context, int index) {
-                return UserCheckboxItem(widget.role.id,
-                    widget.userCheckBoxItems[index].user, widget.recordId);
+                return UserCheckboxItem(
+                    widget.role.id,
+                    widget.userCheckBoxItems[index].user,
+                    widget.recordId,
+                    widget.userCheckBoxItems[index].isChecked);
               },
             ),
           ),

@@ -62,10 +62,12 @@ class TemplateModel {
       roles: map['roles'] != null
           ? List<RoleModel>.from(map['roles']?.map((x) => RoleModel.fromMap(x)))
           : null,
-      records: map['records'] != null
-          ? List<RecordModel>.from(
-              map['records']?.map((x) => RecordModel.fromMap(x)))
-          : null,
+      records:
+          // map['records'] != null
+          // ? List<RecordModel>.from(
+          //     map['records']?.map((x) => RecordModel.fromMap(x)))
+          //:
+          null,
     );
   }
 

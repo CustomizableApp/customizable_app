@@ -1,4 +1,5 @@
 import 'package:customizable_app/model/record_model.dart';
+import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
@@ -22,6 +23,18 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
       appBar: AppBar(
         title: Text(widget.record.name),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AssignRolePage(widget.record),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.person))
+        ],
       ),
       body: Center(
         child: Column(
