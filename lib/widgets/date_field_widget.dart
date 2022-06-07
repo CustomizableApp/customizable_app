@@ -21,9 +21,9 @@ class DateIntervalWidget extends StatefulWidget {
   bool hasChanged = false;
   bool isCreated = false;
 
-  void createTrigger(String recordId, String toolId) {
+  Future<void> createTrigger(String recordId, String toolId) async {
     if (!isCreated) {
-      createData(recordId, toolId);
+      await createData(recordId, toolId);
     }
   }
 
@@ -62,57 +62,59 @@ class _DateIntervalWidgetState extends State<DateIntervalWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                  onTap: () {
-                    DatePicker.showDatePicker(context,
-                        showTitleActions: true,
-                        minTime: DateTime(1970, 1, 1),
-                        maxTime: DateTime(2036, 1, 1),
-                        theme: const DatePickerTheme(
-                            headerColor: Colors.orange,
-                            backgroundColor: Colors.blue,
-                            itemStyle: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                            doneStyle:
-                                TextStyle(color: Colors.white, fontSize: 16)),
-                        onConfirm: (date) {
-                      setState(() {
-                        widget.firstDate = date;
-                      });
-                    }, currentTime: widget.firstDate, locale: LocaleType.en);
-                  },
-                  child: Flexible(
-                      child: Card(
-                          child: Text(
-                              DateFormat.yMd().format(widget.firstDate))))),
+              Flexible(
+                child: GestureDetector(
+                    onTap: () {
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(1970, 1, 1),
+                          maxTime: DateTime(2036, 1, 1),
+                          theme: const DatePickerTheme(
+                              headerColor: Colors.orange,
+                              backgroundColor: Colors.blue,
+                              itemStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                              doneStyle:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
+                          onConfirm: (date) {
+                        setState(() {
+                          widget.firstDate = date;
+                        });
+                      }, currentTime: widget.firstDate, locale: LocaleType.en);
+                    },
+                        child: Card(
+                            child: Text(
+                                DateFormat.yMd().format(widget.firstDate)))),
+              ),
               Text(daysBetween(widget.firstDate, widget.secondDate).toString()),
-              GestureDetector(
-                  onTap: () {
-                    DatePicker.showDatePicker(context,
-                        showTitleActions: true,
-                        minTime: DateTime(1970, 1, 1),
-                        maxTime: DateTime(2036, 1, 1),
-                        theme: const DatePickerTheme(
-                            headerColor: Colors.orange,
-                            backgroundColor: Colors.blue,
-                            itemStyle: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                            doneStyle:
-                                TextStyle(color: Colors.white, fontSize: 16)),
-                        onConfirm: (date) {
-                      setState(() {
-                        widget.secondDate = date;
-                      });
-                    }, currentTime: widget.secondDate, locale: LocaleType.en);
-                  },
-                  child: Flexible(
-                      child: Card(
-                          child: Text(
-                              DateFormat.yMd().format(widget.secondDate))))),
+              Flexible(
+                child: GestureDetector(
+                    onTap: () {
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(1970, 1, 1),
+                          maxTime: DateTime(2036, 1, 1),
+                          theme: const DatePickerTheme(
+                              headerColor: Colors.orange,
+                              backgroundColor: Colors.blue,
+                              itemStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                              doneStyle:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
+                          onConfirm: (date) {
+                        setState(() {
+                          widget.secondDate = date;
+                        });
+                      }, currentTime: widget.secondDate, locale: LocaleType.en);
+                    },
+                        child: Card(
+                            child: Text(
+                                DateFormat.yMd().format(widget.secondDate)))),
+              ),
             ],
           ),
         ],

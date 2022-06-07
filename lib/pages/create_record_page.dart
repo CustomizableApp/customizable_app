@@ -27,7 +27,14 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    Future<void> createData(Function function,String? recordId,String toolId)async{
+      await function.call(recordId, toolId);
+
+    }
+  
     List<Function> functions = [];
+    List<Widget> widgets=[];
 
     return Scaffold(
       appBar: AppBar(
@@ -54,6 +61,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                         controller);
 
                     functions.add(textFieldWidget.createTrigger);
+
                     return textFieldWidget;
 
                   case 2:
@@ -65,6 +73,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                         null);
 
                     functions.add(dateIntervalWidget.createTrigger);
+             
 
                     return dateIntervalWidget;
 
@@ -84,10 +93,17 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
           int index = 0;
           for (Function function in functions) {
-            function.call(recordId, widget.template.tools![index].id);
+             await function.call(recordId, widget.template.tools![index].id);
+
+             //await createData(function, recordId, widget.template.tools![index].id);
             index++;
           }
-          // functions.clear();
+          
+
+          /*for(int i=0;i<functions.length;i++){
+            createData(functions[i], recordId, widget.template.tools![i].id);
+          }*/
+           functions.clear();
 
           //TODO BURASI TOPLANACAK
 

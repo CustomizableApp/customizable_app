@@ -21,9 +21,9 @@ class TextFieldWidget extends StatefulWidget {
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
 
-  void createTrigger(String recordId, String toolId) {
+  Future<void> createTrigger (String recordId, String toolId) async {
     if (!isCreated) {
-      createData(recordId, toolId);
+      await createData(recordId, toolId);
     }
   }
 
@@ -33,13 +33,16 @@ class TextFieldWidget extends StatefulWidget {
     //}
   }
 
-  Future<void> createData(String recordId, String toolId) async {
+  Future<int> createData(String recordId, String toolId) async {
+    
     String? dataId = await FieldService.instance.createData(recordId, toolId);
     if (dataId != null) {
       String? textFieldId =
           await FieldService.instance.createTextField(dataId, controller.text);
       await FieldService.instance.updateDataFieldId(dataId, textFieldId!);
+      return 1;
     }
+    return 0;
   }
 
   updateData(String fieldId) async {

@@ -16,6 +16,19 @@ class ShowRecordPage extends StatefulWidget {
 }
 
 class _ShowRecordPageState extends State<ShowRecordPage> {
+  Function getFunctionWithType(int type) {
+    switch (type) {
+      case 1:
+        return FieldService.instance.getTextFieldData;
+
+      case 2:
+        return FieldService.instance.getIntervalDateFieldData;
+
+      default:
+        return FieldService.instance.getTextFieldData;
+    }
+  }
+
   List<Function> functions = [];
   @override
   Widget build(BuildContext context) {
@@ -44,20 +57,17 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               itemCount:
                   widget.record.datas == null ? 0 : widget.record.datas!.length,
               itemBuilder: (BuildContext context, int index) {
-                switch (widget.record.datas![index].type) {
-                  case 1:
-                    return FutureBuilder(
-                      future: FieldService.instance.getTextFieldData(
-                          widget.record.datas![index].fieldId),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return FutureBuilder(
+                  future: getFunctionWithType(widget.record.datas![index].type)
+                      .call(widget.record.datas![index].fieldId)
+                  /*FieldService.instance.getTextFieldData(
+                          widget.record.datas![index].fieldId)*/
+                  ,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    switch (widget.record.datas![index].type) {
+                      case 1:
                         if (snapshot.hasData) {
                           String text = snapshot.data;
-                          // print("*****" * 10);
-                          // print(index);
-                          // print(text);
-                          // print(widget.record.datas![index].name);
-                          // print(widget.record.datas![index].fieldId);
-                          // print("*****" * 10);
                           TextEditingController controller =
                               TextEditingController();
                           controller.text = text;
@@ -77,11 +87,42 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
-                      },
-                    );
+                      case 2:
+                        if (snapshot.hasData) {
+                          List<DateTime> dateList = snapshot.data;
+                          DateIntervalWidget dateIntervalWidget =
+                              DateIntervalWidget(
+                            widget.record.datas![index].id,
+                            widget.record.datas![index].name,
+                            dateList[0],
+                            dateList[1],
+                            widget.record.datas![index].fieldId,
+                          );
 
-                  case 2:
-                    return FutureBuilder(
+                          functions.add(dateIntervalWidget.updateTrigger);
+
+                          return dateIntervalWidget;
+                        } else {
+                          return const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+                      default:
+                        return Container();
+
+                      // print("*****" * 10);
+                      // print(index);
+                      // print(text);
+                      // print(widget.record.datas![index].name);
+                      // print(widget.record.datas![index].fieldId);
+                      // print("*****" * 10);
+
+                    }
+                  },
+                );
+
+                /* return FutureBuilder(
                       future: FieldService.instance.getIntervalDateFieldData(
                           widget.record.datas![index].fieldId),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -107,9 +148,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                         }
                       },
                     );
-                  default:
-                    return Container();
-                }
+                  */
               },
             ),
           ],

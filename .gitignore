@@ -27,14 +27,8 @@ android/customizable_app_android.iml
 .idea/vcs.xml
 .idea/misc.xml
 .idea/libraries/Flutter_Plugins.xml
-android/customizable_app_android.iml
-.idea/workspace.xml
-android/customizable_app_android.iml
-lib/generated_plugin_registrant.dart
 .idea/libraries/Dart_SDK.xml
 .idea/libraries/Dart_Packages.xml
-.idea/workspace.xml
-.idea/workspace.xml
-.idea/workspace.xml
-android/customizable_app_android.iml
-lib/generated_plugin_registrant.dart
+.history
+.gitignore
+/.gitignore
