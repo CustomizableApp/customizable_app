@@ -21,7 +21,7 @@ class TextFieldWidget extends StatefulWidget {
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
 
-  Future<void> createTrigger (String recordId, String toolId) async {
+  Future<void> createTrigger(String recordId, String toolId) async {
     if (!isCreated) {
       await createData(recordId, toolId);
     }
@@ -34,7 +34,6 @@ class TextFieldWidget extends StatefulWidget {
   }
 
   Future<int> createData(String recordId, String toolId) async {
-    
     String? dataId = await FieldService.instance.createData(recordId, toolId);
     if (dataId != null) {
       String? textFieldId =
@@ -53,13 +52,33 @@ class TextFieldWidget extends StatefulWidget {
 class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(widget.name),
-        TextFormField(
-          controller: widget.controller,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(widget.name),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+              controller: widget.controller,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

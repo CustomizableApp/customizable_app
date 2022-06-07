@@ -55,67 +55,87 @@ class DateIntervalWidget extends StatefulWidget {
 class _DateIntervalWidgetState extends State<DateIntervalWidget> {
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text(widget.name),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: GestureDetector(
-                    onTap: () {
-                      DatePicker.showDatePicker(context,
-                          showTitleActions: true,
-                          minTime: DateTime(1970, 1, 1),
-                          maxTime: DateTime(2036, 1, 1),
-                          theme: const DatePickerTheme(
-                              headerColor: Colors.orange,
-                              backgroundColor: Colors.blue,
-                              itemStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                              doneStyle:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-                          onConfirm: (date) {
-                        setState(() {
-                          widget.firstDate = date;
-                        });
-                      }, currentTime: widget.firstDate, locale: LocaleType.en);
-                    },
-                        child: Card(
-                            child: Text(
-                                DateFormat.yMd().format(widget.firstDate)))),
-              ),
-              Text(daysBetween(widget.firstDate, widget.secondDate).toString()),
-              Flexible(
-                child: GestureDetector(
-                    onTap: () {
-                      DatePicker.showDatePicker(context,
-                          showTitleActions: true,
-                          minTime: DateTime(1970, 1, 1),
-                          maxTime: DateTime(2036, 1, 1),
-                          theme: const DatePickerTheme(
-                              headerColor: Colors.orange,
-                              backgroundColor: Colors.blue,
-                              itemStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                              doneStyle:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-                          onConfirm: (date) {
-                        setState(() {
-                          widget.secondDate = date;
-                        });
-                      }, currentTime: widget.secondDate, locale: LocaleType.en);
-                    },
-                        child: Card(
-                            child: Text(
-                                DateFormat.yMd().format(widget.secondDate)))),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(widget.name),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  child: GestureDetector(
+                      onTap: () {
+                        DatePicker.showDatePicker(context,
+                            showTitleActions: true,
+                            minTime: DateTime(1970, 1, 1),
+                            maxTime: DateTime(2036, 1, 1),
+                            theme: const DatePickerTheme(
+                                headerColor: Colors.orange,
+                                backgroundColor: Colors.blue,
+                                itemStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                                doneStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16)), onConfirm: (date) {
+                          setState(() {
+                            widget.firstDate = date;
+                          });
+                        },
+                            currentTime: widget.firstDate,
+                            locale: LocaleType.en);
+                      },
+                      child: Card(
+                          child:
+                              Text(DateFormat.yMd().format(widget.firstDate)))),
+                ),
+                Text(daysBetween(widget.firstDate, widget.secondDate)
+                    .toString()),
+                Flexible(
+                  child: GestureDetector(
+                      onTap: () {
+                        DatePicker.showDatePicker(context,
+                            showTitleActions: true,
+                            minTime: DateTime(1970, 1, 1),
+                            maxTime: DateTime(2036, 1, 1),
+                            theme: const DatePickerTheme(
+                                headerColor: Colors.orange,
+                                backgroundColor: Colors.blue,
+                                itemStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                                doneStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16)), onConfirm: (date) {
+                          setState(() {
+                            widget.secondDate = date;
+                          });
+                        },
+                            currentTime: widget.secondDate,
+                            locale: LocaleType.en);
+                      },
+                      child: Card(
+                          child: Text(
+                              DateFormat.yMd().format(widget.secondDate)))),
+                ),
+              ],
+            ),
           ),
         ],
       ),
