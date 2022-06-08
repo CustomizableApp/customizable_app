@@ -210,6 +210,47 @@ class FieldService {
     return id;
   }
 
+  Future<String?> createDateField(String dataId, DateTime date) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+      "date": date.toString(),
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createDateField", data: data);
+    String id = response.data["insert_DB_date_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<DateTime> getDateFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getDateFieldDataById",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    DateTime? date = DateTime.parse(dataMap["DB_date_field"][0]["date"]);
+
+    return date;
+  }
+
+  Future<bool> updateDateFieldData(String fieldId, DateTime date) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+      "date": date.toString(),
+    };
+    bool status = false;
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/updateDateFieldDataById", data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
+  }
+
   Future<int?> updateDataFieldId(String dataId, String fieldId) async {
     Map<String, dynamic> data = {
       "data_id": dataId,

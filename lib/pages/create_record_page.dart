@@ -7,6 +7,8 @@ import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/date_field_widget.dart';
+
 class CreateRecordPage extends StatefulWidget {
   const CreateRecordPage(
     this.template,
@@ -27,13 +29,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> createData(
-        Function function, String? recordId, String toolId) async {
-      await function.call(recordId, toolId);
-    }
-
     List<Function> functions = [];
-    List<Widget> widgets = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -74,6 +70,17 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                     functions.add(dateIntervalWidget.createTrigger);
 
                     return dateIntervalWidget;
+
+                  case 3:
+                    DateFieldWidget dateFieldWidget = DateFieldWidget(
+                        widget.template.tools![index].id,
+                        widget.template.tools![index].name,
+                        DateTime(2000, 1, 1),
+                        null);
+
+                    functions.add(dateFieldWidget.createTrigger);
+
+                    return dateFieldWidget;
 
                   default:
                     return Container();

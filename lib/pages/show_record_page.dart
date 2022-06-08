@@ -2,6 +2,7 @@ import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
+import 'package:customizable_app/widgets/date_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,9 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
 
       case 2:
         return FieldService.instance.getIntervalDateFieldData;
+
+      case 3:
+        return FieldService.instance.getDateFieldData;
 
       default:
         return FieldService.instance.getTextFieldData;
@@ -59,10 +63,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               itemBuilder: (BuildContext context, int index) {
                 return FutureBuilder(
                   future: getFunctionWithType(widget.record.datas![index].type)
-                      .call(widget.record.datas![index].fieldId)
-                  /*FieldService.instance.getTextFieldData(
-                          widget.record.datas![index].fieldId)*/
-                  ,
+                      .call(widget.record.datas![index].fieldId),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     switch (widget.record.datas![index].type) {
                       case 1:
@@ -108,47 +109,30 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
-                      default:
-                        return Container();
-
-                      // print("*****" * 10);
-                      // print(index);
-                      // print(text);
-                      // print(widget.record.datas![index].name);
-                      // print(widget.record.datas![index].fieldId);
-                      // print("*****" * 10);
-
-                    }
-                  },
-                );
-
-                /* return FutureBuilder(
-                      future: FieldService.instance.getIntervalDateFieldData(
-                          widget.record.datas![index].fieldId),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      case 3:
                         if (snapshot.hasData) {
-                          List<DateTime> dateList = snapshot.data;
-                          DateIntervalWidget dateIntervalWidget =
-                              DateIntervalWidget(
+                          DateTime date = snapshot.data;
+                          DateFieldWidget dateFieldWidget = DateFieldWidget(
                             widget.record.datas![index].id,
                             widget.record.datas![index].name,
-                            dateList[0],
-                            dateList[1],
+                            date,
                             widget.record.datas![index].fieldId,
                           );
 
-                          functions.add(dateIntervalWidget.updateTrigger);
+                          functions.add(dateFieldWidget.updateTrigger);
 
-                          return dateIntervalWidget;
+                          return dateFieldWidget;
                         } else {
                           return const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
-                      },
-                    );
-                  */
+                      default:
+                        return Container();
+                    }
+                  },
+                );
               },
             ),
           ],
