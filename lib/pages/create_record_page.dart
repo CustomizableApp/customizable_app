@@ -3,7 +3,7 @@ import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
-import 'package:customizable_app/widgets/date_field_widget.dart';
+import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -27,14 +27,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    Future<void> createData(Function function,String? recordId,String toolId)async{
+    Future<void> createData(
+        Function function, String? recordId, String toolId) async {
       await function.call(recordId, toolId);
-
     }
-  
+
     List<Function> functions = [];
-    List<Widget> widgets=[];
+    List<Widget> widgets = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +72,6 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                         null);
 
                     functions.add(dateIntervalWidget.createTrigger);
-             
 
                     return dateIntervalWidget;
 
@@ -93,17 +91,16 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
           int index = 0;
           for (Function function in functions) {
-             await function.call(recordId, widget.template.tools![index].id);
+            await function.call(recordId, widget.template.tools![index].id);
 
-             //await createData(function, recordId, widget.template.tools![index].id);
+            //await createData(function, recordId, widget.template.tools![index].id);
             index++;
           }
-          
 
           /*for(int i=0;i<functions.length;i++){
             createData(functions[i], recordId, widget.template.tools![i].id);
           }*/
-           functions.clear();
+          functions.clear();
 
           //TODO BURASI TOPLANACAK
 

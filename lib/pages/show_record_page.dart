@@ -2,7 +2,7 @@ import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
-import 'package:customizable_app/widgets/date_field_widget.dart';
+import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/text_field_widget.dart';
