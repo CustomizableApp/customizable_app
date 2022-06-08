@@ -3,7 +3,6 @@ import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
 import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
-import 'package:customizable_app/service/user.dart';
 import 'package:dio/dio.dart';
 import '../core/app_contants.dart';
 
@@ -244,6 +243,48 @@ class FieldService {
     bool status = false;
     Response response = await Dio()
         .post(AppConstants.apiUrl + "/updateDateFieldDataById", data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
+  }
+
+  Future<String?> createCounterField(String dataId, int counter) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+      "counter": counter,
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createCounterField", data: data);
+    String id = response.data["insert_DB_counter_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<int?> getCounterFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getCounterFieldDataByFieldId",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    int? counterData = dataMap["DB_counter_field"][0]["counter"];
+
+    return counterData;
+  }
+
+  Future<bool> updateCounterFieldData(String fieldId, int counter) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+      "counter": counter,
+    };
+    bool status = false;
+    Response response = await Dio().post(
+        AppConstants.apiUrl + "/updateCounterFieldDataByFieldId",
+        data: data);
 
     if (response.data != null) {
       status = true;

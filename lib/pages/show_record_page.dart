@@ -2,6 +2,7 @@ import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
+import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
 
       case 3:
         return FieldService.instance.getDateFieldData;
+      case 4:
+        return FieldService.instance.getCounterFieldData;
 
       default:
         return FieldService.instance.getTextFieldData;
@@ -122,6 +125,26 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                           functions.add(dateFieldWidget.updateTrigger);
 
                           return dateFieldWidget;
+                        } else {
+                          return const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+
+                      case 4:
+                        if (snapshot.hasData) {
+                          int counter = snapshot.data;
+                          CounterFieldWidget counterFieldWidget =
+                              CounterFieldWidget(
+                            widget.record.datas![index].id,
+                            widget.record.datas![index].name,
+                            widget.record.datas![index].fieldId,
+                            counter,
+                          );
+
+                          functions.add(counterFieldWidget.updateTrigger);
+                          return counterFieldWidget;
                         } else {
                           return const Padding(
                             padding: EdgeInsets.all(8.0),

@@ -3,6 +3,7 @@ import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
+import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +82,17 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
                     functions.add(dateFieldWidget.createTrigger);
 
                     return dateFieldWidget;
+                  case 4:
+                    CounterFieldWidget counterFieldWidget = CounterFieldWidget(
+                      widget.template.tools![index].id,
+                      widget.template.tools![index].name,
+                      null,
+                      0,
+                    );
 
+                    functions.add(counterFieldWidget.createTrigger);
+
+                    return counterFieldWidget;
                   default:
                     return Container();
                 }
