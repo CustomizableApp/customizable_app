@@ -75,16 +75,12 @@ final ImagePicker imgpicker = ImagePicker();
   selectImage() async {
     try {
         var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
-        //you can use ImageCourse.camera for Camera capture
         if(pickedFile != null){
               imagepath = pickedFile.path;
-              File imagefile = File(imagepath); //convert Path to File
-              Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-              String base64string = base64.encode(imagebytes); //convert bytes to base64 string
+              File imagefile = File(imagepath); 
+              Uint8List imagebytes = await imagefile.readAsBytes(); 
+              String base64string = base64.encode(imagebytes);
               widget.base64String=base64string;
-              Uint8List decodedbytes = base64.decode(base64string);
-              //decode base64 stirng to bytes
-
               setState(() {
               
               });
