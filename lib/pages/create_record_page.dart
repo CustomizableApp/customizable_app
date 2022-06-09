@@ -4,6 +4,7 @@ import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
+import 'package:customizable_app/widgets/image_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -37,69 +38,76 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
         title: Text(widget.recordName),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.template.tools == null
-                  ? 0
-                  : widget.template.tools!.length,
-              itemBuilder: (BuildContext context, int index) {
-                switch (widget.template.tools![index].type) {
-                  case 1:
-                    TextEditingController controller = TextEditingController();
-                    TextFieldWidget textFieldWidget = TextFieldWidget(
-                        widget.template.tools![index].id,
-                        widget.template.tools![index].name,
-                        null,
-                        "",
-                        controller);
+      body: ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.template.tools == null
+            ? 0
+            : widget.template.tools!.length,
+        itemBuilder: (BuildContext context, int index) {
+          switch (widget.template.tools![index].type) {
+            case 1:
 
-                    functions.add(textFieldWidget.createTrigger);
+              TextEditingController controller = TextEditingController();
+              TextFieldWidget textFieldWidget = TextFieldWidget(
+                  widget.template.tools![index].id,
+                  widget.template.tools![index].name,
+                  null,
+                  "",
+                  controller);
 
-                    return textFieldWidget;
+              functions.add(textFieldWidget.createTrigger);
 
-                  case 2:
-                    DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-                        widget.template.tools![index].id,
-                        widget.template.tools![index].name,
-                        DateTime(2000, 1, 1),
-                        DateTime(2000, 1, 1),
-                        null);
+              return textFieldWidget;
+              
 
-                    functions.add(dateIntervalWidget.createTrigger);
+            case 2:
+              DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
+                  widget.template.tools![index].id,
+                  widget.template.tools![index].name,
+                  DateTime(2000, 1, 1),
+                  DateTime(2000, 1, 1),
+                  null);
 
-                    return dateIntervalWidget;
+              functions.add(dateIntervalWidget.createTrigger);
 
-                  case 3:
-                    DateFieldWidget dateFieldWidget = DateFieldWidget(
-                        widget.template.tools![index].id,
-                        widget.template.tools![index].name,
-                        DateTime(2000, 1, 1),
-                        null);
+              return dateIntervalWidget;
 
-                    functions.add(dateFieldWidget.createTrigger);
+            case 3:
+              DateFieldWidget dateFieldWidget = DateFieldWidget(
+                  widget.template.tools![index].id,
+                  widget.template.tools![index].name,
+                  DateTime(2000, 1, 1),
+                  null);
 
-                    return dateFieldWidget;
-                  case 4:
-                    CounterFieldWidget counterFieldWidget = CounterFieldWidget(
-                      widget.template.tools![index].id,
-                      widget.template.tools![index].name,
-                      null,
-                      0,
-                    );
+              functions.add(dateFieldWidget.createTrigger);
 
-                    functions.add(counterFieldWidget.createTrigger);
+              return dateFieldWidget;
+            case 4:
+              CounterFieldWidget counterFieldWidget = CounterFieldWidget(
+                widget.template.tools![index].id,
+                widget.template.tools![index].name,
+                null,
+                0,
+              );
 
-                    return counterFieldWidget;
-                  default:
-                    return Container();
-                }
-              },
-            ),
-          ],
-        ),
+              functions.add(counterFieldWidget.createTrigger);
+
+              return counterFieldWidget;
+
+              case 5:
+              ImageFieldWidget imageFieldWidget = ImageFieldWidget(
+                  widget.template.tools![index].id,
+                  widget.template.tools![index].name,
+                  null,
+                  "");
+
+              functions.add(imageFieldWidget.createTrigger);
+
+              return imageFieldWidget;
+            default:
+              return Container();
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),

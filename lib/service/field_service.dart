@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:customizable_app/model/data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
@@ -284,6 +286,47 @@ class FieldService {
     bool status = false;
     Response response = await Dio().post(
         AppConstants.apiUrl + "/updateCounterFieldDataByFieldId",
+        data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
+  }
+  Future<String?> createImageField(String dataId, String jsonObj) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+      "content": jsonObj,
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createImageField", data: data);
+    String id = response.data["insert_DB_image_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<String?> getImageFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getImageFieldData",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    String? counterData = dataMap["DB_image_field"][0]["content"];
+
+    return counterData;
+  }
+
+  Future<bool> updateImageFieldData(String fieldId, String jsonObj) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+      "content": jsonObj,
+    };
+    bool status = false;
+    Response response = await Dio().post(
+        AppConstants.apiUrl + "/updateImageField",
         data: data);
 
     if (response.data != null) {
