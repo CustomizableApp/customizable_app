@@ -4,6 +4,7 @@ import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
+import 'package:customizable_app/widgets/draw_field_widget.dart';
 import 'package:customizable_app/widgets/image_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
@@ -104,6 +105,22 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               functions.add(imageFieldWidget.createTrigger);
 
               return imageFieldWidget;
+
+              case 6:
+              DrawFieldWidget drawFieldWidget = DrawFieldWidget(
+                  widget.template.tools![index].id,
+                  widget.template.tools![index].name,
+                  null,
+                  "");
+
+              functions.add(drawFieldWidget.createTrigger);
+
+              return ListView(
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  drawFieldWidget
+                ],
+              );
             default:
               return Container();
           }

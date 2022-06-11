@@ -6,6 +6,7 @@ import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
+import 'package:customizable_app/widgets/draw_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,9 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
 
         case 5:
         return FieldService.instance.getImageFieldData;
+
+        case 6:
+        return FieldService.instance.getDrawFieldData;
 
 
       default:
@@ -168,6 +172,29 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
       
                     functions.add(imageFieldWidget.updateTrigger);
                     return imageFieldWidget;
+
+                    
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  case 6:
+                  if (snapshot.hasData) {
+                    String jsonObj = snapshot.data;
+                    String base64String=jsonDecode(jsonObj);
+                    DrawFieldWidget drawFieldWidget = DrawFieldWidget(
+                      widget.record.datas![index].id,
+                      widget.record.datas![index].name,
+                      widget.record.datas![index].fieldId,
+                      base64String,
+                    );
+      
+                    functions.add(drawFieldWidget.updateTrigger);
+                    return drawFieldWidget;
+
+                    
                   } else {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),

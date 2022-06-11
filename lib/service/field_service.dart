@@ -334,6 +334,47 @@ class FieldService {
     }
     return status;
   }
+  Future<String?> createDrawField(String dataId, String jsonObj) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+      "content": jsonObj,
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createDrawField", data: data);
+    String id = response.data["insert_DB_draw_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<String?> getDrawFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getDrawFieldData",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    String? counterData = dataMap["DB_draw_field"][0]["content"];
+
+    return counterData;
+  }
+
+  Future<bool> updateDrawFieldData(String fieldId, String jsonObj) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+      "content": jsonObj,
+    };
+    bool status = false;
+    Response response = await Dio().post(
+        AppConstants.apiUrl + "/updateDrawField",
+        data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
+  }
 
   Future<int?> updateDataFieldId(String dataId, String fieldId) async {
     Map<String, dynamic> data = {
