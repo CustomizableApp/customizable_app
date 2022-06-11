@@ -28,9 +28,9 @@ class TextFieldWidget extends StatefulWidget {
   }
 
   void updateTrigger() {
-    //if (isCreated && hasChanged) {
+    if (text != controller.text) {
     updateData(fieldId!);
-    //}
+    }
   }
 
   Future<int> createData(String recordId, String toolId) async {

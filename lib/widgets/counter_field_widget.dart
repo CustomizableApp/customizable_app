@@ -8,12 +8,14 @@ class CounterFieldWidget extends StatefulWidget {
     this.fieldId,
     this.counter, {
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    oldCounter=counter;
+  }
   final String id;
   final String name;
   int counter;
+  late int oldCounter;
   String? fieldId;
-
   bool hasChanged = false;
   bool isCreated = false;
 
@@ -27,9 +29,9 @@ class CounterFieldWidget extends StatefulWidget {
   }
 
   void updateTrigger() {
-    //if (isCreated && hasChanged) {
+    if (counter!=oldCounter) {
     updateData(fieldId!);
-    //}
+    }
   }
 
   Future<int> createData(String recordId, String toolId) async {

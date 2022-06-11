@@ -10,11 +10,14 @@ class DateFieldWidget extends StatefulWidget {
     this.date,
     this.fieldId, {
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+   oldDate=date;
+  }
   final String id;
   final String name;
   //THEY NEED TO BE NULLABLE
   DateTime date;
+  late DateTime oldDate;
   String? fieldId;
   bool hasChanged = false;
   bool isCreated = false;
@@ -26,9 +29,9 @@ class DateFieldWidget extends StatefulWidget {
   }
 
   void updateTrigger() {
-    // if (isCreated && hasChanged) {
+     if (date!=oldDate) {
     updateData(fieldId!);
-    // }
+     }
   }
 
   Future<void> createData(String recordId, String toolId) async {

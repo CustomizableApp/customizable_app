@@ -11,7 +11,10 @@ class DateIntervalWidget extends StatefulWidget {
     this.secondDate,
     this.fieldId, {
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    oldFirstDate=firstDate;
+    oldSecondDate=secondDate;
+  }
   final String id;
   final String name;
   //THEY NEED TO BE NULLABLE
@@ -20,6 +23,8 @@ class DateIntervalWidget extends StatefulWidget {
   String? fieldId;
   bool hasChanged = false;
   bool isCreated = false;
+  late DateTime oldFirstDate;
+  late DateTime oldSecondDate;
 
   Future<void> createTrigger(String recordId, String toolId) async {
     if (!isCreated) {
@@ -28,9 +33,9 @@ class DateIntervalWidget extends StatefulWidget {
   }
 
   void updateTrigger() {
-    // if (isCreated && hasChanged) {
+    if (firstDate!=oldFirstDate || secondDate!=oldSecondDate) {
     updateData(fieldId!);
-    // }
+     }
   }
 
   Future<void> createData(String recordId, String toolId) async {

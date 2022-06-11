@@ -21,13 +21,16 @@ class ImageFieldWidget extends StatefulWidget {
     this.base64String,
      {
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    oldBase64String=base64String;
+  }
   final String id;
   final String name;
   String base64String="";
   String? fieldId;
   bool hasChanged = false;
   bool isCreated = false;
+  late String oldBase64String;
   
   @override
   _ImageFieldWidgetState createState() => _ImageFieldWidgetState();
@@ -39,9 +42,9 @@ class ImageFieldWidget extends StatefulWidget {
   }
 
   void updateTrigger() {
-    //if (isCreated && hasChanged) {
+    if (base64String!=oldBase64String) {
     updateData(fieldId!);
-    //}
+    }
   }
 
   Future<int> createData(String recordId, String toolId) async {
@@ -80,9 +83,8 @@ final ImagePicker imgpicker = ImagePicker();
               File imagefile = File(imagepath); 
               Uint8List imagebytes = await imagefile.readAsBytes(); 
               String base64string = base64.encode(imagebytes);
-              widget.base64String=base64string;
               setState(() {
-              
+              widget.base64String=base64string;
               });
         }else{
            print("No image is selected.");
