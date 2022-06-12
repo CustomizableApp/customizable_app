@@ -23,6 +23,7 @@ class DrawFieldWidget extends StatefulWidget {
   bool hasChanged = false;
   bool isCreated = false;
   bool isDrawPadOpen = false;
+     final GlobalKey<SfSignaturePadState> _signaturePadKey = GlobalKey();
 
   @override
   _DrawFieldWidgetState createState() => _DrawFieldWidgetState();
@@ -73,7 +74,7 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<SfSignaturePadState> _signaturePadKey = GlobalKey();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -102,21 +103,33 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                   padding: EdgeInsets.all(20),
                   child: Column(children: [
                     widget.base64String != ""
-                        ? FutureBuilder(
-                            future: openImage(widget.base64String),
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasData) {
-                                Image image = snapshot.data;
-                                return image;
-                              } else {
-                                return const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
-                                );
-                              }
-                            })
+                        ? Column(
+                          children: [
+                            FutureBuilder(
+                                future: openImage(widget.base64String),
+                                builder:
+                                    (BuildContext context, AsyncSnapshot snapshot) {
+                                  if (snapshot.hasData) {
+                                    Image image = snapshot.data;
+                                    return image;
+                                  } else {
+                                    return const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+                                  }
+                                }),
+                                ElevatedButton(
+                                          child: const Text("RESET"),
+                                          onPressed: ()  {
+                                            setState(() {
+                                              widget.base64String="";
+                                              widget.isDrawPadOpen=true;
+                                            });
+                                          }),
+                          ],
+                        )
                         : !widget.isDrawPadOpen
                             ? Column(
                                 children: [
@@ -130,7 +143,7 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                                               widget.isDrawPadOpen = true;
                                             });
                                           },
-                                          child: const Text("Draw")),
+                                          child: const Text("DRAW")),
                                     ],
                                   ),
                                 ],
@@ -140,7 +153,7 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                                   SizedBox(
                                     child: 
                                         SfSignaturePad(
-                                          key: _signaturePadKey,
+                                          key: widget._signaturePadKey,
                                           minimumStrokeWidth: 4,
                                           maximumStrokeWidth: 6,
                                           strokeColor: Colors.black,
@@ -152,18 +165,18 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                                   Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       ElevatedButton(
-                                          child: const Text("Save"),
+                                          child: const Text("SAVE"),
                                           onPressed: () async {
                                             ui.Image image =
-                                                await _signaturePadKey
+                                                await widget._signaturePadKey
                                                     .currentState!
                                                     .toImage();
                                             saveDrawingAsBase64(image);
                                           }),
                                       ElevatedButton(
-                                          child: const Text("Clear"),
+                                          child: const Text("CLEAR"),
                                           onPressed: () async {
-                                            _signaturePadKey.currentState!
+                                            widget._signaturePadKey.currentState!
                                                 .clear();
                                           }),
                                     ],
