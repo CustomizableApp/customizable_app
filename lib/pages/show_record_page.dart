@@ -22,28 +22,117 @@ class ShowRecordPage extends StatefulWidget {
 }
 
 class _ShowRecordPageState extends State<ShowRecordPage> {
-  Function getFunctionWithType(int type) {
-    switch (type) {
-      case 1:
-        return FieldService.instance.getTextFieldData;
+  @override
+  initState() {
+    super.initState();
+    createRecordDatas();
+  }
 
-      case 2:
-        return FieldService.instance.getIntervalDateFieldData;
+  late List<Widget> recordDatas = [];
 
-      case 3:
-        return FieldService.instance.getDateFieldData;
-      case 4:
-        return FieldService.instance.getCounterFieldData;
+  createRecordDatas() async {
+    await getToolDatas();
+    setState(() {});
+  }
+
+  Future<void> getToolDatas() async {
+    for (int i = 0; i < widget.record.datas!.length; i++) {
+      switch (widget.record.datas![i].type) {
+        case 1:
+          String text = await FieldService.instance
+              .getTextFieldData(widget.record.datas![i].fieldId);
+          TextEditingController controller = TextEditingController();
+          controller.text = text;
+          TextFieldWidget textFieldWidget = TextFieldWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].name,
+            widget.record.datas![i].fieldId,
+            text,
+            controller,
+          );
+
+          functions.add(textFieldWidget.updateTrigger);
+          recordDatas.add(textFieldWidget);
+          break;
+
+        case 2:
+          List<DateTime> dateList = await FieldService.instance
+              .getIntervalDateFieldData(widget.record.datas![i].fieldId);
+          DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].name,
+            dateList[0],
+            dateList[1],
+            widget.record.datas![i].fieldId,
+          );
+
+          functions.add(dateIntervalWidget.updateTrigger);
+
+          recordDatas.add(dateIntervalWidget);
+          break;
+
+        case 3:
+          DateTime date = await FieldService.instance
+              .getDateFieldData(widget.record.datas![i].fieldId);
+          DateFieldWidget dateFieldWidget = DateFieldWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].name,
+            date,
+            widget.record.datas![i].fieldId,
+          );
+
+          functions.add(dateFieldWidget.updateTrigger);
+
+          recordDatas.add(dateFieldWidget);
+          break;
+
+        case 4:
+          int? counter = await FieldService.instance
+              .getCounterFieldData(widget.record.datas![i].fieldId);
+          CounterFieldWidget counterFieldWidget = CounterFieldWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].name,
+            widget.record.datas![i].fieldId,
+            counter!,
+          );
+
+          functions.add(counterFieldWidget.updateTrigger);
+          recordDatas.add(counterFieldWidget);
+          break;
 
         case 5:
-        return FieldService.instance.getImageFieldData;
+          String? jsonObj = await FieldService.instance
+              .getImageFieldData(widget.record.datas![i].fieldId);
+          String base64String = jsonDecode(jsonObj!);
+          ImageFieldWidget imageFieldWidget = ImageFieldWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].name,
+            widget.record.datas![i].fieldId,
+            base64String,
+          );
+
+          functions.add(imageFieldWidget.updateTrigger);
+          recordDatas.add(imageFieldWidget);
+          break;
 
         case 6:
-        return FieldService.instance.getDrawFieldData;
+          String? jsonObj = await FieldService.instance
+              .getDrawFieldData(widget.record.datas![i].fieldId);
+          String base64String = jsonDecode(jsonObj!);
+          DrawFieldWidget drawFieldWidget = DrawFieldWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].name,
+            widget.record.datas![i].fieldId,
+            base64String,
+          );
 
+          functions.add(drawFieldWidget.updateTrigger);
+          recordDatas.add(drawFieldWidget);
+          break;
 
-      default:
-        return FieldService.instance.getTextFieldData;
+        default:
+          break;
+      }
     }
   }
 
@@ -67,7 +156,19 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               icon: const Icon(Icons.person))
         ],
       ),
-      body: ListView.builder(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: recordDatas.isEmpty?MainAxisAlignment.center:MainAxisAlignment.start,
+          
+            children: recordDatas.isEmpty
+                ? [const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  )]
+                : recordDatas),
+      )
+
+      /* ListView.builder(
         shrinkWrap: true,
         itemCount:
             widget.record.datas == null ? 0 : widget.record.datas!.length,
@@ -207,7 +308,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             },
           );
         },
-      ),
+      )*/
+      ,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),
         onPressed: () async {

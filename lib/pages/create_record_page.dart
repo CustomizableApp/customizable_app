@@ -25,107 +25,133 @@ class CreateRecordPage extends StatefulWidget {
 }
 
 class _CreateRecordPageState extends State<CreateRecordPage> {
+  final List<Widget> templateTools=[];
+  late List<Function> functions=[];
   @override
   void initState() {
     super.initState();
+    getTemplateTools();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    List<Function> functions = [];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.recordName),
-        centerTitle: true,
-      ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: widget.template.tools == null
-            ? 0
-            : widget.template.tools!.length,
-        itemBuilder: (BuildContext context, int index) {
-          switch (widget.template.tools![index].type) {
+  void getTemplateTools(){
+    for(int i=0;i<widget.template.tools!.length;i++){
+      switch (widget.template.tools![i].type) {
             case 1:
 
               TextEditingController controller = TextEditingController();
-              TextFieldWidget textFieldWidget = TextFieldWidget(
-                  widget.template.tools![index].id,
-                  widget.template.tools![index].name,
+              final TextFieldWidget textFieldWidget = TextFieldWidget(
+                  widget.template.tools![i].id,
+                  widget.template.tools![i].name,
                   null,
                   "",
                   controller);
 
               functions.add(textFieldWidget.createTrigger);
 
-              return textFieldWidget;
+              templateTools.add(textFieldWidget);
+              break;
               
 
             case 2:
-              DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-                  widget.template.tools![index].id,
-                  widget.template.tools![index].name,
+              final DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
+                  widget.template.tools![i].id,
+                  widget.template.tools![i].name,
                   DateTime(2000, 1, 1),
                   DateTime(2000, 1, 1),
                   null);
 
               functions.add(dateIntervalWidget.createTrigger);
 
-              return dateIntervalWidget;
+              templateTools.add(dateIntervalWidget);
+              break;
 
             case 3:
               DateFieldWidget dateFieldWidget = DateFieldWidget(
-                  widget.template.tools![index].id,
-                  widget.template.tools![index].name,
+                  widget.template.tools![i].id,
+                  widget.template.tools![i].name,
                   DateTime(2000, 1, 1),
                   null);
 
               functions.add(dateFieldWidget.createTrigger);
 
-              return dateFieldWidget;
+              templateTools.add(dateFieldWidget);
+              break;
             case 4:
               CounterFieldWidget counterFieldWidget = CounterFieldWidget(
-                widget.template.tools![index].id,
-                widget.template.tools![index].name,
+                widget.template.tools![i].id,
+                widget.template.tools![i].name,
                 null,
                 0,
               );
 
               functions.add(counterFieldWidget.createTrigger);
 
-              return counterFieldWidget;
+              templateTools.add(counterFieldWidget);
+              break;
 
               case 5:
               ImageFieldWidget imageFieldWidget = ImageFieldWidget(
-                  widget.template.tools![index].id,
-                  widget.template.tools![index].name,
+                  widget.template.tools![i].id,
+                  widget.template.tools![i].name,
                   null,
                   "");
 
               functions.add(imageFieldWidget.createTrigger);
 
-              return imageFieldWidget;
+              templateTools.add(imageFieldWidget);
+              break;
 
               case 6:
               DrawFieldWidget drawFieldWidget = DrawFieldWidget(
-                  widget.template.tools![index].id,
-                  widget.template.tools![index].name,
+                  widget.template.tools![i].id,
+                  widget.template.tools![i].name,
                   null,
                   "");
 
               functions.add(drawFieldWidget.createTrigger);
 
-              return ListView(
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  drawFieldWidget
-                ],
-              );
+              templateTools.add(drawFieldWidget);
+              break;
+
             default:
-              return Container();
+              break;
           }
-        },
+    }
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.recordName),
+        centerTitle: true,
       ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: templateTools,
+        ),
+
+      )
+      
+      
+      /*ListView(
+        addRepaintBoundaries: false,
+        addAutomaticKeepAlives: false,
+        shrinkWrap: true,
+        children: templateTools,
+      )*/
+      
+      
+      /*ListView.builder(
+        addRepaintBoundaries: false,
+        addAutomaticKeepAlives: false,
+        shrinkWrap: true,
+        itemCount: templateTools.length,
+        itemBuilder: (BuildContext context, int index) {
+          return templateTools[index];
+        },
+      )*/,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),
         onPressed: () async {
