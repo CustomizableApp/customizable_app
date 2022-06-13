@@ -5,6 +5,7 @@ import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
 import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
+import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:dio/dio.dart';
 import '../core/app_contants.dart';
 
@@ -195,6 +196,56 @@ class FieldService {
     return id;
   }
 
+  Future<String?> createVoteField(String dataId) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createVoteField", data: data);
+    String id = response.data["insert_DB_vote_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<String?> createVoteFieldItem(String voteFieldId, String text) async {
+    Map<String, dynamic> data = {
+      "vote_field_id": voteFieldId,
+      "text": text,
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createVoteFieldItem", data: data);
+    String id = response.data["insert_DB_vote_item"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<bool> updateVoteFieldItem(String voteFieldItemId, int counter) async {
+    Map<String, dynamic> data = {
+      "field_item_id": voteFieldItemId,
+      "count": counter,
+    };
+    bool status = false;
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/updateVoteFieldItemCount", data: data);
+
+    if (response.data != null) {
+      status = true;
+    }
+    return status;
+  }
+
+  Future<List<VoteFieldItemModel>> getVoteFieldData(String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+    List<VoteFieldItemModel> dataList = List.empty(growable: true);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getVoteFieldData", queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    //TODO GET DATA AS VoteFieldItemModel LIST  HERE
+    return dataList;
+  }
+
   Future<String?> createIntervalDateField(
       String dataId, DateTime firstDate, DateTime secondDate) async {
     Map<String, dynamic> data = {
@@ -293,14 +344,15 @@ class FieldService {
     }
     return status;
   }
+
   Future<String?> createImageField(String dataId, String jsonObj) async {
     Map<String, dynamic> data = {
       "data_id": dataId,
       "content": jsonObj,
     };
 
-    Response response = await Dio()
-        .post(AppConstants.apiUrl + "/createImageField", data: data);
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createImageField", data: data);
     String id = response.data["insert_DB_image_field"]["returning"][0]["id"];
     return id;
   }
@@ -310,9 +362,8 @@ class FieldService {
       "field_id": fieldId,
     };
 
-    Response response = await Dio().get(
-        AppConstants.apiUrl + "/getImageFieldData",
-        queryParameters: data);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getImageFieldData", queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
     String? counterData = dataMap["DB_image_field"][0]["content"];
 
@@ -325,23 +376,23 @@ class FieldService {
       "content": jsonObj,
     };
     bool status = false;
-    Response response = await Dio().post(
-        AppConstants.apiUrl + "/updateImageField",
-        data: data);
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/updateImageField", data: data);
 
     if (response.data != null) {
       status = true;
     }
     return status;
   }
+
   Future<String?> createDrawField(String dataId, String jsonObj) async {
     Map<String, dynamic> data = {
       "data_id": dataId,
       "content": jsonObj,
     };
 
-    Response response = await Dio()
-        .post(AppConstants.apiUrl + "/createDrawField", data: data);
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createDrawField", data: data);
     String id = response.data["insert_DB_draw_field"]["returning"][0]["id"];
     return id;
   }
@@ -351,9 +402,8 @@ class FieldService {
       "field_id": fieldId,
     };
 
-    Response response = await Dio().get(
-        AppConstants.apiUrl + "/getDrawFieldData",
-        queryParameters: data);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getDrawFieldData", queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
     String? counterData = dataMap["DB_draw_field"][0]["content"];
 
@@ -366,9 +416,8 @@ class FieldService {
       "content": jsonObj,
     };
     bool status = false;
-    Response response = await Dio().post(
-        AppConstants.apiUrl + "/updateDrawField",
-        data: data);
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/updateDrawField", data: data);
 
     if (response.data != null) {
       status = true;

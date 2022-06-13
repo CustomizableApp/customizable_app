@@ -8,6 +8,7 @@ import 'package:customizable_app/widgets/draw_field_widget.dart';
 import 'package:customizable_app/widgets/image_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
+import 'package:customizable_app/widgets/vote_field_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/date_field_widget.dart';
@@ -25,103 +26,111 @@ class CreateRecordPage extends StatefulWidget {
 }
 
 class _CreateRecordPageState extends State<CreateRecordPage> {
-  final List<Widget> templateTools=[];
-  late List<Function> functions=[];
+  final List<Widget> templateTools = [];
+  late List<Function> functions = [];
   @override
   void initState() {
     super.initState();
     getTemplateTools();
   }
-  void getTemplateTools(){
-    for(int i=0;i<widget.template.tools!.length;i++){
+
+  void getTemplateTools() {
+    for (int i = 0; i < widget.template.tools!.length; i++) {
       switch (widget.template.tools![i].type) {
-            case 1:
+        case 1:
+          TextEditingController controller = TextEditingController();
+          final TextFieldWidget textFieldWidget = TextFieldWidget(
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              null,
+              "",
+              controller);
 
-              TextEditingController controller = TextEditingController();
-              final TextFieldWidget textFieldWidget = TextFieldWidget(
-                  widget.template.tools![i].id,
-                  widget.template.tools![i].name,
-                  null,
-                  "",
-                  controller);
+          functions.add(textFieldWidget.createTrigger);
 
-              functions.add(textFieldWidget.createTrigger);
+          templateTools.add(textFieldWidget);
+          break;
 
-              templateTools.add(textFieldWidget);
-              break;
-              
+        case 2:
+          final DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              DateTime(2000, 1, 1),
+              DateTime(2000, 1, 1),
+              null);
 
-            case 2:
-              final DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-                  widget.template.tools![i].id,
-                  widget.template.tools![i].name,
-                  DateTime(2000, 1, 1),
-                  DateTime(2000, 1, 1),
-                  null);
+          functions.add(dateIntervalWidget.createTrigger);
 
-              functions.add(dateIntervalWidget.createTrigger);
+          templateTools.add(dateIntervalWidget);
+          break;
 
-              templateTools.add(dateIntervalWidget);
-              break;
+        case 3:
+          DateFieldWidget dateFieldWidget = DateFieldWidget(
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              DateTime(2000, 1, 1),
+              null);
 
-            case 3:
-              DateFieldWidget dateFieldWidget = DateFieldWidget(
-                  widget.template.tools![i].id,
-                  widget.template.tools![i].name,
-                  DateTime(2000, 1, 1),
-                  null);
+          functions.add(dateFieldWidget.createTrigger);
 
-              functions.add(dateFieldWidget.createTrigger);
+          templateTools.add(dateFieldWidget);
+          break;
+        case 4:
+          CounterFieldWidget counterFieldWidget = CounterFieldWidget(
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            null,
+            0,
+          );
 
-              templateTools.add(dateFieldWidget);
-              break;
-            case 4:
-              CounterFieldWidget counterFieldWidget = CounterFieldWidget(
-                widget.template.tools![i].id,
-                widget.template.tools![i].name,
-                null,
-                0,
-              );
+          functions.add(counterFieldWidget.createTrigger);
 
-              functions.add(counterFieldWidget.createTrigger);
+          templateTools.add(counterFieldWidget);
+          break;
 
-              templateTools.add(counterFieldWidget);
-              break;
+        case 5:
+          ImageFieldWidget imageFieldWidget = ImageFieldWidget(
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              null,
+              "");
 
-              case 5:
-              ImageFieldWidget imageFieldWidget = ImageFieldWidget(
-                  widget.template.tools![i].id,
-                  widget.template.tools![i].name,
-                  null,
-                  "");
+          functions.add(imageFieldWidget.createTrigger);
 
-              functions.add(imageFieldWidget.createTrigger);
+          templateTools.add(imageFieldWidget);
+          break;
 
-              templateTools.add(imageFieldWidget);
-              break;
+        case 6:
+          DrawFieldWidget drawFieldWidget = DrawFieldWidget(
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              null,
+              "");
 
-              case 6:
-              DrawFieldWidget drawFieldWidget = DrawFieldWidget(
-                  widget.template.tools![i].id,
-                  widget.template.tools![i].name,
-                  null,
-                  "");
+          functions.add(drawFieldWidget.createTrigger);
 
-              functions.add(drawFieldWidget.createTrigger);
+          templateTools.add(drawFieldWidget);
+          break;
 
-              templateTools.add(drawFieldWidget);
-              break;
+        case 7:
+          VoteFieldWidget voteFieldWidget = VoteFieldWidget(
+              widget.template.tools![i].id,
+              null,
+              widget.template.tools![i].name,
+              null);
 
-            default:
-              break;
-          }
+          functions.add(voteFieldWidget.createTrigger);
+          templateTools.add(voteFieldWidget);
+          break;
+
+        default:
+          break;
+      }
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.recordName),
@@ -131,18 +140,15 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
         child: Column(
           children: templateTools,
         ),
-
       )
-      
-      
+
       /*ListView(
         addRepaintBoundaries: false,
         addAutomaticKeepAlives: false,
         shrinkWrap: true,
         children: templateTools,
       )*/
-      
-      
+
       /*ListView.builder(
         addRepaintBoundaries: false,
         addAutomaticKeepAlives: false,
@@ -151,7 +157,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
         itemBuilder: (BuildContext context, int index) {
           return templateTools[index];
         },
-      )*/,
+      )*/
+      ,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),
         onPressed: () async {
