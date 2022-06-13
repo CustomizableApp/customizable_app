@@ -29,7 +29,7 @@ class TextFieldWidget extends StatefulWidget {
 
   void updateTrigger() {
     if (text != controller.text) {
-    updateData(fieldId!);
+      updateData(fieldId!);
     }
   }
 
@@ -44,7 +44,7 @@ class TextFieldWidget extends StatefulWidget {
     return 0;
   }
 
-  updateData(String fieldId) async {
+  Future<void> updateData(String fieldId) async {
     await FieldService.instance.updateTextFieldData(fieldId, controller.text);
   }
 }
