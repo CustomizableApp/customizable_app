@@ -94,97 +94,92 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(20),
-                  child: Column(children: [
-                    widget.base64String != ""
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(20),
+              child: Column(children: [
+                widget.base64String != ""
+                    ? Column(
+                      children: [
+                        FutureBuilder(
+                            future: openImage(widget.base64String),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasData) {
+                                Image image = snapshot.data;
+                                return image;
+                              } else {
+                                return const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
+                                );
+                              }
+                            }),
+                            ElevatedButton(
+                                      child: const Text("RESET"),
+                                      onPressed: ()  {
+                                        setState(() {
+                                          widget.base64String="";
+                                          widget.isDrawPadOpen=true;
+                                        });
+                                      }),
+                      ],
+                    )
+                    : !widget.isDrawPadOpen
                         ? Column(
-                          children: [
-                            FutureBuilder(
-                                future: openImage(widget.base64String),
-                                builder:
-                                    (BuildContext context, AsyncSnapshot snapshot) {
-                                  if (snapshot.hasData) {
-                                    Image image = snapshot.data;
-                                    return image;
-                                  } else {
-                                    return const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Center(
-                                          child: CircularProgressIndicator()),
-                                    );
-                                  }
-                                }),
-                                ElevatedButton(
-                                          child: const Text("RESET"),
-                                          onPressed: ()  {
-                                            setState(() {
-                                              widget.base64String="";
-                                              widget.isDrawPadOpen=true;
-                                            });
-                                          }),
-                          ],
-                        )
-                        : !widget.isDrawPadOpen
-                            ? Column(
+                            children: [
+                              const Text("To draw click 'DRAW' button."),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text("To draw click 'DRAW' button."),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              widget.isDrawPadOpen = true;
-                                            });
-                                          },
-                                          child: const Text("DRAW")),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                children: [
-                                  SizedBox(
-                                    child: 
-                                        SfSignaturePad(
-                                          key: widget._signaturePadKey,
-                                          minimumStrokeWidth: 4,
-                                          maximumStrokeWidth: 6,
-                                          strokeColor: Colors.black,
-                                          backgroundColor: Colors.white,
-                                        ),
-                                    height: 200,
-                                    width: 300,
-                                  ),
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ElevatedButton(
-                                          child: const Text("SAVE"),
-                                          onPressed: () async {
-                                            ui.Image image =
-                                                await widget._signaturePadKey
-                                                    .currentState!
-                                                    .toImage();
-                                            saveDrawingAsBase64(image);
-                                          }),
-                                      ElevatedButton(
-                                          child: const Text("CLEAR"),
-                                          onPressed: () async {
-                                            widget._signaturePadKey.currentState!
-                                                .clear();
-                                          }),
-                                    ],
-                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          widget.isDrawPadOpen = true;
+                                        });
+                                      },
+                                      child: const Text("DRAW")),
                                 ],
                               ),
-                  ]),
-                )),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              SizedBox(
+                                child: 
+                                    SfSignaturePad(
+                                      key: widget._signaturePadKey,
+                                      minimumStrokeWidth: 4,
+                                      maximumStrokeWidth: 6,
+                                      strokeColor: Colors.black,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                height: 200,
+                                width: 300,
+                              ),
+                              Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton(
+                                      child: const Text("SAVE"),
+                                      onPressed: () async {
+                                        ui.Image image =
+                                            await widget._signaturePadKey
+                                                .currentState!
+                                                .toImage();
+                                        saveDrawingAsBase64(image);
+                                      }),
+                                  ElevatedButton(
+                                      child: const Text("CLEAR"),
+                                      onPressed: () async {
+                                        widget._signaturePadKey.currentState!
+                                            .clear();
+                                      }),
+                                ],
+                              ),
+                            ],
+                          ),
+              ]),
+            ),
           )
         ],
       ),
