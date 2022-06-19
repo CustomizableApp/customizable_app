@@ -242,7 +242,10 @@ class FieldService {
     Response response = await Dio()
         .get(AppConstants.apiUrl + "/getVoteFieldData", queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
-    //TODO GET DATA AS VoteFieldItemModel LIST  HERE
+    for(int i=0;i<dataMap["DB_vote_field"][0]["vote_items"].length;i++){
+      dataList.add(VoteFieldItemModel.fromMap(dataMap["DB_vote_field"][0]["vote_items"][i]));
+    }
+    
     return dataList;
   }
 

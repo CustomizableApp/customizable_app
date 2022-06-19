@@ -3,7 +3,7 @@ import 'dart:convert';
 class VoteFieldItemModel {
   String id;
   String text;
-  String count;
+  int count;
   VoteFieldItemModel({
     required this.id,
     required this.text,
@@ -13,7 +13,7 @@ class VoteFieldItemModel {
   VoteFieldItemModel copyWith({
     String? id,
     String? text,
-    String? count,
+    int? count,
   }) {
     return VoteFieldItemModel(
       id: id ?? this.id,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:customizable_app/model/record_model.dart';
+import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
@@ -8,6 +9,7 @@ import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
 import 'package:customizable_app/widgets/draw_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
+import 'package:customizable_app/widgets/vote_field_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/image_field_widget.dart';
@@ -128,6 +130,20 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
 
           functions.add(drawFieldWidget.updateTrigger);
           recordDatas.add(drawFieldWidget);
+          break;
+
+          case 7:
+          List<VoteFieldItemModel> voteItemList = await FieldService.instance
+              .getVoteFieldData(widget.record.datas![i].fieldId);
+          VoteFieldWidget voteFieldWidget = VoteFieldWidget(
+            widget.record.datas![i].id,
+            widget.record.datas![i].fieldId,
+            widget.record.datas![i].name,
+            voteItemList,
+          );
+
+          functions.add(voteFieldWidget.updateTrigger);
+          recordDatas.add(voteFieldWidget);
           break;
 
         default:
