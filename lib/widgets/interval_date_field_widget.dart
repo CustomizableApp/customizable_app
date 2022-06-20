@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -9,7 +11,8 @@ class DateIntervalWidget extends StatefulWidget {
     this.name,
     this.firstDate,
     this.secondDate,
-    this.fieldId, {
+    this.fieldId,
+    this.recordID, {
     Key? key,
   }) : super(key: key) {
     oldFirstDate=firstDate;
@@ -21,6 +24,7 @@ class DateIntervalWidget extends StatefulWidget {
   DateTime firstDate;
   DateTime secondDate;
   String? fieldId;
+  String recordID;
   bool hasChanged = false;
   bool isCreated = false;
   late DateTime oldFirstDate;
@@ -51,6 +55,9 @@ class DateIntervalWidget extends StatefulWidget {
   updateData(String fieldId) async {
     await FieldService.instance
         .updateIntervalDateFieldData(fieldId, firstDate, secondDate);
+        if(recordID!=""){
+      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+    }
   }
 
   @override

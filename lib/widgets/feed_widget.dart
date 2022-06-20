@@ -19,6 +19,7 @@ class FeedWidget extends StatefulWidget {
 }
 
 class _FeedWidgetState extends State<FeedWidget> {
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,7 +38,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                   switch (widget.feedData[index].contentType) {
                     case 1:
                       String text =jsonDecode( widget.feedData[index].content);
-                      //String text=jsonEncode(widget.feedData[index].content);
+                      
 
                       return Row(
                         mainAxisAlignment:
@@ -52,6 +53,25 @@ class _FeedWidgetState extends State<FeedWidget> {
                               child: Text(
                                 text,
                                 style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                      case 4:
+                      String text =jsonDecode( widget.feedData[index].content);
+                      
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 50,
+                              child: Text(
+                                text,
+                                style: TextStyle(fontSize: 15,color: Colors.grey),
                               ),
                             ),
                           )

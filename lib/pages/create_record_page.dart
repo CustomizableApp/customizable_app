@@ -44,6 +44,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               null,
               "",
+              "",
               controller);
 
           functions.add(textFieldWidget.createTrigger);
@@ -57,7 +58,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               DateTime(2000, 1, 1),
               DateTime(2000, 1, 1),
-              null);
+              null,
+              "",);
 
           functions.add(dateIntervalWidget.createTrigger);
 
@@ -69,7 +71,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].id,
               widget.template.tools![i].name,
               DateTime(2000, 1, 1),
-              null);
+              null,
+              "",);
 
           functions.add(dateFieldWidget.createTrigger);
 
@@ -81,6 +84,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
             widget.template.tools![i].name,
             null,
             0,
+            "",
           );
 
           functions.add(counterFieldWidget.createTrigger);
@@ -93,7 +97,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].id,
               widget.template.tools![i].name,
               null,
-              "");
+              "",
+              "",);
 
           functions.add(imageFieldWidget.createTrigger);
 
@@ -105,7 +110,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].id,
               widget.template.tools![i].name,
               null,
-              "");
+              "",
+              "",);
 
           functions.add(drawFieldWidget.createTrigger);
 

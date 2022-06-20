@@ -19,6 +19,7 @@ class ImageFieldWidget extends StatefulWidget {
     this.name,
     this.fieldId,
     this.base64String,
+    this.recordID,
      {
     Key? key,
   }) : super(key: key) {
@@ -28,6 +29,7 @@ class ImageFieldWidget extends StatefulWidget {
   final String name;
   String base64String="";
   String? fieldId;
+  String recordID;
   bool hasChanged = false;
   bool isCreated = false;
   late String oldBase64String;
@@ -62,6 +64,9 @@ class ImageFieldWidget extends StatefulWidget {
   updateData(String fieldId) async {
     var jsonObject=jsonEncode(base64String);
     await FieldService.instance.updateImageFieldData(fieldId, jsonObject);
+    if(recordID!=""){
+      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+    }
   }
 }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
@@ -6,13 +8,15 @@ class CounterFieldWidget extends StatefulWidget {
     this.id,
     this.name,
     this.fieldId,
-    this.counter, {
+    this.counter,
+    this.recordID, {
     Key? key,
   }) : super(key: key) {
     oldCounter=counter;
   }
   final String id;
   final String name;
+  String recordID;
   int counter;
   late int oldCounter;
   String? fieldId;
@@ -47,6 +51,9 @@ class CounterFieldWidget extends StatefulWidget {
 
   updateData(String fieldId) async {
     await FieldService.instance.updateCounterFieldData(fieldId, counter);
+    if(recordID!=""){
+      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+    }
   }
 }
 

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:customizable_app/service/field_service.dart';
+import 'package:customizable_app/widgets/feed_widget.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatefulWidget {
@@ -7,11 +10,13 @@ class TextFieldWidget extends StatefulWidget {
     this.name,
     this.fieldId,
     this.text,
+    this.recordID,
     this.controller, {
     Key? key,
   }) : super(key: key);
   final String id;
   final String name;
+  String recordID;
   String text;
   String? fieldId;
   final TextEditingController controller;
@@ -46,6 +51,10 @@ class TextFieldWidget extends StatefulWidget {
 
   Future<void> updateData(String fieldId) async {
     await FieldService.instance.updateTextFieldData(fieldId, controller.text);
+    //TODO CONSTANT USER ID
+    if(recordID!=""){
+      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+    }
   }
 }
 

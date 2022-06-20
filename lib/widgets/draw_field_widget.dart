@@ -10,13 +10,15 @@ class DrawFieldWidget extends StatefulWidget {
     this.id,
     this.name,
     this.fieldId,
-    this.base64String, {
+    this.base64String,
+    this.recordID, {
     Key? key,
   }) : super(key: key) {
     oldBase64String = base64String;
   }
   final String id;
   final String name;
+  String recordID;
   String base64String = "";
   late String oldBase64String;
   String? fieldId;
@@ -55,6 +57,9 @@ class DrawFieldWidget extends StatefulWidget {
   updateData(String fieldId) async {
     var jsonObject = jsonEncode(base64String);
     await FieldService.instance.updateDrawFieldData(fieldId, jsonObject);
+    if(recordID!=""){
+      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+    }
   }
 }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/service/user.dart';
 import 'package:customizable_app/utils/toast_util.dart';
@@ -31,6 +33,16 @@ class _UserCheckboxItemState extends State<UserCheckboxItem> {
               if (value!) {
                 bool status = await FieldService.instance.assignUserToRole(
                     widget.recordId, widget.roleId, widget.user.id!);
+                if (widget.recordId != "") {
+                  await FieldService.instance.createFeedData(
+                      jsonEncode("sehaId" +
+                          " assigned " +
+                          widget.user.name! +
+                          " to role x"),
+                      4,
+                      widget.recordId,
+                      "sehaId");
+                }
                 if (status) {
                   ToastUtil.toastMessage(
                       context, "${widget.user.name} assigned to role!", "OK");
@@ -38,6 +50,16 @@ class _UserCheckboxItemState extends State<UserCheckboxItem> {
               } else {
                 bool status = await FieldService.instance.unAssignUserToRole(
                     widget.recordId, widget.roleId, widget.user.id!);
+                    if (widget.recordId != "") {
+                  await FieldService.instance.createFeedData(
+                      jsonEncode("sehaId" +
+                          " unassigned " +
+                          widget.user.name! +
+                          " from role x"),
+                      4,
+                      widget.recordId,
+                      "sehaId");
+                }
                 if (status) {
                   ToastUtil.toastMessage(context,
                       "${widget.user.name} unassigned from role!", "OK");

@@ -52,6 +52,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             widget.record.datas![i].name,
             widget.record.datas![i].fieldId,
             text,
+            widget.record.id,
             controller,
           );
 
@@ -68,6 +69,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             dateList[0],
             dateList[1],
             widget.record.datas![i].fieldId,
+            widget.record.id
           );
 
           functions.add(dateIntervalWidget.updateTrigger);
@@ -83,6 +85,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             widget.record.datas![i].name,
             date,
             widget.record.datas![i].fieldId,
+            widget.record.id
           );
 
           functions.add(dateFieldWidget.updateTrigger);
@@ -98,6 +101,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             widget.record.datas![i].name,
             widget.record.datas![i].fieldId,
             counter!,
+            widget.record.id
           );
 
           functions.add(counterFieldWidget.updateTrigger);
@@ -113,6 +117,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             widget.record.datas![i].name,
             widget.record.datas![i].fieldId,
             base64String,
+            widget.record.id
           );
 
           functions.add(imageFieldWidget.updateTrigger);
@@ -128,6 +133,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             widget.record.datas![i].name,
             widget.record.datas![i].fieldId,
             base64String,
+            widget.record.id
           );
 
           functions.add(drawFieldWidget.updateTrigger);
