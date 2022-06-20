@@ -55,7 +55,7 @@ class TemplateModel {
     return TemplateModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      isFeed: map['isFeed'] ?? false,
+      isFeed: map['is_feed'] ?? false,
       tools: map['tools'] != null
           ? List<ToolModel>.from(map['tools']?.map((x) => ToolModel.fromMap(x)))
           : null,

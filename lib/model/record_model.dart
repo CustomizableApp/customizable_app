@@ -11,25 +11,17 @@ class RecordModel {
   String name;
   List<DataModel>? datas;
   List<RoleModel>? roles;
+  bool isFeed=false;
 
   RecordModel({
     required this.id,
     required this.name,
+    required this.isFeed,
     this.roles,
     this.datas,
   });
 
-  RecordModel copyWith({
-    String? id,
-    String? name,
-    List<DataModel>? datas,
-  }) {
-    return RecordModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      datas: datas ?? this.datas,
-    );
-  }
+  
 
   Map<String, dynamic> toMap() {
     return {
@@ -45,6 +37,7 @@ class RecordModel {
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       roles: template.roles,
+      isFeed: template.isFeed
       // datas:
       //     List<DataModel>.from(map['datas']?.map((x) => DataModel.fromMap(x))),
     );

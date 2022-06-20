@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:customizable_app/model/feed_data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/pages/assign_role.dart';
@@ -8,6 +9,7 @@ import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
 import 'package:customizable_app/widgets/draw_field_widget.dart';
+import 'package:customizable_app/widgets/feed_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
 import 'package:customizable_app/widgets/vote_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -149,6 +151,13 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
         default:
           break;
       }
+    }
+    if(widget.record.isFeed){
+      TextEditingController controller = TextEditingController();
+      List <FeedDataModel>? feedData= await FieldService.instance.getFeedData(widget.record.id);
+      FeedWidget feedWidget = FeedWidget(controller, feedData,widget.record.id);
+      
+      recordDatas.add(feedWidget);
     }
   }
 

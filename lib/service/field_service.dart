@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:customizable_app/model/data_model.dart';
+import 'package:customizable_app/model/feed_data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
 import 'package:customizable_app/model/template_model.dart';
@@ -305,6 +306,7 @@ class FieldService {
     }
     return status;
   }
+  
 
   Future<String?> createCounterField(String dataId, int counter) async {
     Map<String, dynamic> data = {
@@ -438,6 +440,34 @@ class FieldService {
         await Dio().post(AppConstants.apiUrl + "/updateData", data: data);
 
     return response.statusCode;
+  }
+  Future<List<FeedDataModel>> getFeedData(String recordID) async {
+    Map<String, dynamic> data = {
+      "record_id": recordID,
+    };
+    List<FeedDataModel> dataList = List.empty(growable: true);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getFeedDataByFieldID", queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    for(int i=0;i<dataMap["DB_feed"].length;i++){
+      dataList.add(FeedDataModel.fromMap(dataMap["DB_feed"][i]));
+    }
+    
+    return dataList;
+  }
+  Future<DateTime?> createFeedData(String content, int contentType,String recordID,String userID) async {
+    Map<String, dynamic> data = {
+      "content": content,
+      "content_type": contentType,
+      "record_id": recordID,
+      "user_id": userID,
+      
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createFeedData", data: data);
+    DateTime? timeStamp = DateTime.parse(response.data["insert_DB_feed"]["returning"][0]["time_stamp"]);
+    return timeStamp;
   }
 
   // Future<Response> getDatasByRecordId(String recordId) async {
