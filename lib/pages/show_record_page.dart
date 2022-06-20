@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:customizable_app/model/feed_data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
+import 'package:customizable_app/model/tickable_field_item_model.dart';
 import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/field_service.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/image_field_widget.dart';
 import '../widgets/text_field_widget.dart';
+import '../widgets/tickable_field_widget.dart';
 
 class ShowRecordPage extends StatefulWidget {
   const ShowRecordPage(this.record, {Key? key}) : super(key: key);
@@ -64,13 +66,12 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           List<DateTime> dateList = await FieldService.instance
               .getIntervalDateFieldData(widget.record.datas![i].fieldId);
           DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].name,
-            dateList[0],
-            dateList[1],
-            widget.record.datas![i].fieldId,
-            widget.record.id
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].name,
+              dateList[0],
+              dateList[1],
+              widget.record.datas![i].fieldId,
+              widget.record.id);
 
           functions.add(dateIntervalWidget.updateTrigger);
 
@@ -81,12 +82,11 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           DateTime date = await FieldService.instance
               .getDateFieldData(widget.record.datas![i].fieldId);
           DateFieldWidget dateFieldWidget = DateFieldWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].name,
-            date,
-            widget.record.datas![i].fieldId,
-            widget.record.id
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].name,
+              date,
+              widget.record.datas![i].fieldId,
+              widget.record.id);
 
           functions.add(dateFieldWidget.updateTrigger);
 
@@ -97,12 +97,11 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           int? counter = await FieldService.instance
               .getCounterFieldData(widget.record.datas![i].fieldId);
           CounterFieldWidget counterFieldWidget = CounterFieldWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].name,
-            widget.record.datas![i].fieldId,
-            counter!,
-            widget.record.id
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].name,
+              widget.record.datas![i].fieldId,
+              counter!,
+              widget.record.id);
 
           functions.add(counterFieldWidget.updateTrigger);
           recordDatas.add(counterFieldWidget);
@@ -113,12 +112,11 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               .getImageFieldData(widget.record.datas![i].fieldId);
           String base64String = jsonDecode(jsonObj!);
           ImageFieldWidget imageFieldWidget = ImageFieldWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].name,
-            widget.record.datas![i].fieldId,
-            base64String,
-            widget.record.id
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].name,
+              widget.record.datas![i].fieldId,
+              base64String,
+              widget.record.id);
 
           functions.add(imageFieldWidget.updateTrigger);
           recordDatas.add(imageFieldWidget);
@@ -129,18 +127,17 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               .getDrawFieldData(widget.record.datas![i].fieldId);
           String base64String = jsonDecode(jsonObj!);
           DrawFieldWidget drawFieldWidget = DrawFieldWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].name,
-            widget.record.datas![i].fieldId,
-            base64String,
-            widget.record.id
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].name,
+              widget.record.datas![i].fieldId,
+              base64String,
+              widget.record.id);
 
           functions.add(drawFieldWidget.updateTrigger);
           recordDatas.add(drawFieldWidget);
           break;
 
-          case 7:
+        case 7:
           List<VoteFieldItemModel> voteItemList = await FieldService.instance
               .getVoteFieldData(widget.record.datas![i].fieldId);
           VoteFieldWidget voteFieldWidget = VoteFieldWidget(
@@ -153,16 +150,31 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           functions.add(voteFieldWidget.updateTrigger);
           recordDatas.add(voteFieldWidget);
           break;
+        case 8:
+          List<TickableFieldItemModel> tickableItemList = await FieldService
+              .instance
+              .getTickableFieldData(widget.record.datas![i].fieldId);
+          TickableFieldWidet voteFieldWidget = TickableFieldWidet(
+            widget.record.datas![i].id,
+            widget.record.datas![i].fieldId,
+            widget.record.datas![i].name,
+            tickableItemList,
+          );
+          functions.add(voteFieldWidget.updateTrigger);
+          recordDatas.add(voteFieldWidget);
+          break;
 
         default:
           break;
       }
     }
-    if(widget.record.isFeed){
+    if (widget.record.isFeed) {
       TextEditingController controller = TextEditingController();
-      List <FeedDataModel>? feedData= await FieldService.instance.getFeedData(widget.record.id);
-      FeedWidget feedWidget = FeedWidget(controller, feedData,widget.record.id);
-      
+      List<FeedDataModel>? feedData =
+          await FieldService.instance.getFeedData(widget.record.id);
+      FeedWidget feedWidget =
+          FeedWidget(controller, feedData, widget.record.id);
+
       recordDatas.add(feedWidget);
     }
   }
@@ -189,13 +201,16 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: recordDatas.isEmpty?MainAxisAlignment.center:MainAxisAlignment.start,
-          
+            mainAxisAlignment: recordDatas.isEmpty
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: recordDatas.isEmpty
-                ? [const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  )]
+                ? [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  ]
                 : recordDatas),
       )
 

@@ -5,6 +5,7 @@ import 'package:customizable_app/model/feed_data_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
 import 'package:customizable_app/model/template_model.dart';
+import 'package:customizable_app/model/tickable_field_item_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
 import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:dio/dio.dart';
@@ -197,6 +198,50 @@ class FieldService {
     return id;
   }
 
+  Future<String?> createTickableField(String dataId) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createTickableField", data: data);
+    String id = response.data["insert_DB_tickable_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<String?> createTickableFieldItem(
+      String tickableListId, String text) async {
+    Map<String, dynamic> data = {
+      "tickable_list_id": tickableListId,
+      "content": text,
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createListItem", data: data);
+    String id = response.data["insert_DB_list_item"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<List<TickableFieldItemModel>> getTickableFieldData(
+      String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+    List<TickableFieldItemModel> dataList = List.empty(growable: true);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getTickableFieldData",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    for (int i = 0;
+        i < dataMap["DB_tickable_field"][0]["list_items"].length;
+        i++) {
+      dataList.add(TickableFieldItemModel.fromMap(
+          dataMap["DB_tickable_field"][0]["list_items"][i]));
+    }
+
+    return dataList;
+  }
+
   Future<String?> createVoteField(String dataId) async {
     Map<String, dynamic> data = {
       "data_id": dataId,
@@ -243,10 +288,11 @@ class FieldService {
     Response response = await Dio()
         .get(AppConstants.apiUrl + "/getVoteFieldData", queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
-    for(int i=0;i<dataMap["DB_vote_field"][0]["vote_items"].length;i++){
-      dataList.add(VoteFieldItemModel.fromMap(dataMap["DB_vote_field"][0]["vote_items"][i]));
+    for (int i = 0; i < dataMap["DB_vote_field"][0]["vote_items"].length; i++) {
+      dataList.add(VoteFieldItemModel.fromMap(
+          dataMap["DB_vote_field"][0]["vote_items"][i]));
     }
-    
+
     return dataList;
   }
 
@@ -306,7 +352,6 @@ class FieldService {
     }
     return status;
   }
-  
 
   Future<String?> createCounterField(String dataId, int counter) async {
     Map<String, dynamic> data = {
@@ -441,32 +486,36 @@ class FieldService {
 
     return response.statusCode;
   }
+
   Future<List<FeedDataModel>> getFeedData(String recordID) async {
     Map<String, dynamic> data = {
       "record_id": recordID,
     };
     List<FeedDataModel> dataList = List.empty(growable: true);
-    Response response = await Dio()
-        .get(AppConstants.apiUrl + "/getFeedDataByFieldID", queryParameters: data);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getFeedDataByFieldID",
+        queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
-    for(int i=0;i<dataMap["DB_feed"].length;i++){
+    for (int i = 0; i < dataMap["DB_feed"].length; i++) {
       dataList.add(FeedDataModel.fromMap(dataMap["DB_feed"][i]));
     }
-    
+
     return dataList;
   }
-  Future<DateTime?> createFeedData(String content, int contentType,String recordID,String userID) async {
+
+  Future<DateTime?> createFeedData(
+      String content, int contentType, String recordID, String userID) async {
     Map<String, dynamic> data = {
       "content": content,
       "content_type": contentType,
       "record_id": recordID,
       "user_id": userID,
-      
     };
 
     Response response =
         await Dio().post(AppConstants.apiUrl + "/createFeedData", data: data);
-    DateTime? timeStamp = DateTime.parse(response.data["insert_DB_feed"]["returning"][0]["time_stamp"]);
+    DateTime? timeStamp = DateTime.parse(
+        response.data["insert_DB_feed"]["returning"][0]["time_stamp"]);
     return timeStamp;
   }
 

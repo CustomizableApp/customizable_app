@@ -12,6 +12,7 @@ import 'package:customizable_app/widgets/vote_field_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/date_field_widget.dart';
+import '../widgets/tickable_field_widget.dart';
 
 class CreateRecordPage extends StatefulWidget {
   const CreateRecordPage(
@@ -54,12 +55,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 2:
           final DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              DateTime(2000, 1, 1),
-              DateTime(2000, 1, 1),
-              null,
-              "",);
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            DateTime(2000, 1, 1),
+            DateTime(2000, 1, 1),
+            null,
+            "",
+          );
 
           functions.add(dateIntervalWidget.createTrigger);
 
@@ -68,11 +70,12 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 3:
           DateFieldWidget dateFieldWidget = DateFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              DateTime(2000, 1, 1),
-              null,
-              "",);
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            DateTime(2000, 1, 1),
+            null,
+            "",
+          );
 
           functions.add(dateFieldWidget.createTrigger);
 
@@ -94,11 +97,12 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 5:
           ImageFieldWidget imageFieldWidget = ImageFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              null,
-              "",
-              "",);
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            null,
+            "",
+            "",
+          );
 
           functions.add(imageFieldWidget.createTrigger);
 
@@ -107,11 +111,12 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 6:
           DrawFieldWidget drawFieldWidget = DrawFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              null,
-              "",
-              "",);
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            null,
+            "",
+            "",
+          );
 
           functions.add(drawFieldWidget.createTrigger);
 
@@ -127,6 +132,15 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
           functions.add(voteFieldWidget.createTrigger);
           templateTools.add(voteFieldWidget);
+          break;
+        case 8:
+          TickableFieldWidet tickableFieldWidget = TickableFieldWidet(
+              widget.template.tools![i].id,
+              null,
+              widget.template.tools![i].name,
+              null);
+          functions.add(tickableFieldWidget.createTrigger);
+          templateTools.add(tickableFieldWidget);
           break;
 
         default:
