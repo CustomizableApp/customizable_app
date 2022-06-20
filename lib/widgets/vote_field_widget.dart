@@ -76,10 +76,15 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
               child: const Text('Continue'),
               onPressed: () async {
                 String text = controller.text;
-                String? itemID = await FieldService.instance
-                    .createVoteFieldItem(widget.fieldId!, text);
-                VoteFieldItemModel voteItem =
-                    VoteFieldItemModel(id: itemID!, text: text, count: 0);
+                VoteFieldItemModel voteItem;
+                if (widget.fieldId != null) {
+                  String? itemID = await FieldService.instance
+                      .createVoteFieldItem(widget.fieldId!, text);
+                  voteItem =
+                      VoteFieldItemModel(id: itemID!, text: text, count: 0);
+                } else {
+                  voteItem = VoteFieldItemModel(id: "", text: text, count: 0);
+                }
                 widget.voteItems!.add(voteItem);
                 Navigator.of(context).pop();
               },

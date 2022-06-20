@@ -78,10 +78,16 @@ class _TickableFieldWidetState extends State<TickableFieldWidet> {
               child: const Text('Continue'),
               onPressed: () async {
                 String text = controller.text;
-                String? itemID = await FieldService.instance
-                    .createTickableFieldItem(widget.id, text);
-                TickableFieldItemModel tickableItem = TickableFieldItemModel(
-                    id: itemID!, text: text, ticked: false);
+                TickableFieldItemModel tickableItem;
+                if (widget.fieldId != null) {
+                  String? itemID = await FieldService.instance
+                      .createTickableFieldItem(widget.fieldId!, text);
+                  tickableItem = TickableFieldItemModel(
+                      id: itemID!, text: text, ticked: false);
+                } else {
+                  tickableItem =
+                      TickableFieldItemModel(id: "", text: text, ticked: false);
+                }
                 widget.tickableItems!.add(tickableItem);
                 Navigator.of(context).pop();
               },
