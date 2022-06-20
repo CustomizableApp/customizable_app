@@ -30,8 +30,9 @@ class VoteFieldWidget extends StatefulWidget {
     if (dataId != null) {
       String? voteFieldId = await FieldService.instance.createVoteField(dataId);
       await FieldService.instance.updateDataFieldId(dataId, voteFieldId!);
-      for(int i=0;i<voteItems!.length;i++){
-        await FieldService.instance.createVoteFieldItem(voteFieldId, voteItems![i].text);
+      for (int i = 0; i < voteItems!.length; i++) {
+        await FieldService.instance
+            .createVoteFieldItem(voteFieldId, voteItems![i].text);
       }
       return 1;
     }
@@ -75,11 +76,12 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
               child: const Text('Continue'),
               onPressed: () async {
                 String text = controller.text;
-                String? itemID=await FieldService.instance.createVoteFieldItem(widget.id, text);
-                VoteFieldItemModel voteItem= VoteFieldItemModel(id: itemID!, text:text, count: 0);
+                String? itemID = await FieldService.instance
+                    .createVoteFieldItem(widget.fieldId!, text);
+                VoteFieldItemModel voteItem =
+                    VoteFieldItemModel(id: itemID!, text: text, count: 0);
                 widget.voteItems!.add(voteItem);
                 Navigator.of(context).pop();
-                
               },
             ),
           ],
@@ -87,7 +89,6 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
       },
     );
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -113,39 +114,42 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
-              children: [
-                widget.voteItems!.isEmpty
-                    ? const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("Click + button to add new vote item"),
-                    )
-                    : SizedBox(
-                      height: 100,
-                      width: 300,
-                      child: ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: widget.voteItems!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(widget.voteItems![index].text,style: const TextStyle(fontSize: 20)),
-                                Text(widget.voteItems![index].count.toString(),style: const TextStyle(fontSize: 20))
-                              ],
-                            );
-                          }),
+                  children: [
+                    widget.voteItems!.isEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("Click + button to add new vote item"),
+                          )
+                        : SizedBox(
+                            height: 100,
+                            width: 300,
+                            child: ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                itemCount: widget.voteItems!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(widget.voteItems![index].text,
+                                          style: const TextStyle(fontSize: 20)),
+                                      Text(
+                                          widget.voteItems![index].count
+                                              .toString(),
+                                          style: const TextStyle(fontSize: 20))
+                                    ],
+                                  );
+                                }),
+                          ),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () async {
+                        await createNewVoteItemDialog();
+                        setState(() {});
+                      },
                     ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () async {
-                    await createNewVoteItemDialog();
-                    setState(() {
-                      
-                    });
-                  },
+                  ],
                 ),
-              ],
-            ),
               ],
             ),
           )
