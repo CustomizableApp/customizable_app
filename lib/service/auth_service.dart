@@ -54,8 +54,9 @@ class AuthenticationService {
         email: email,
         password: password,
       );
+      //TODO USER TYPE
       await UserService.instance
-          .createNewUser(name, surname, userCredential.user!.uid);
+          .createNewUser(name, surname, userCredential.user!.uid, 0);
 
       if (userCredential.user?.uid != null) {
         isSignedIn = true;

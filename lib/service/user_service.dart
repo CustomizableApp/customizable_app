@@ -49,14 +49,15 @@ class UserService {
     }
   }
 
-  createNewUser(String? name, String? surname, String id) {
+  createNewUser(String? name, String? surname, String id, int type) {
     Map<String, dynamic> data = {
-      "Name": name,
-      "Surname": surname,
-      "UserID": id,
+      "name": name,
+      "surname": surname,
+      "id": id,
+      "type": type,
     };
     try {
-      Dio().post(AppConstants.apiUrl + "/CreateNewUser", data: data);
+      Dio().post(AppConstants.apiUrl + "/createUser", data: data);
     } catch (e) {
       print(e);
     }
