@@ -1,4 +1,5 @@
 import 'package:customizable_app/firebase_options.dart';
+import 'package:customizable_app/login/login_page.dart';
 import 'package:customizable_app/pages/template_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: FirebaseAuth.instance.currentUser?.uid == null
-          ? const TemplatePage()
+          ? const LoginPage()
           : const TemplatePage(), //HOMEPAGE
     );
   }

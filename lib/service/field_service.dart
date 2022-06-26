@@ -8,6 +8,7 @@ import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/model/tickable_field_item_model.dart';
 import 'package:customizable_app/model/tool_model.dart';
 import 'package:customizable_app/model/vote_field_item.dart';
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:dio/dio.dart';
 import '../core/app_contants.dart';
 
@@ -617,6 +618,26 @@ class FieldService {
       for (int j = 0; j < list.length; j++) {
         records.add(RecordModel.fromMap(list[j], template));
       }
+    }
+    return records;
+  }
+
+  Future<List<RecordModel>> getRecordsByUserId(TemplateModel template) async {
+    Map<String, dynamic> data = {
+      "user_id": AuthenticationService.instance.getUserId(),
+    };
+    List<RecordModel> records = List.empty(growable: true);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getRecordsByAssignedUserId",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List dataList = dataMap["DB_record_role"];
+
+    //TODO BETTER SOLUTION
+    for (int i = 0; i < dataList.length; i++) {
+      //List list = dataList[i]["record_name"];
+
+      records.add(RecordModel.fromMap(dataList[i]["record_name"], template));
     }
     return records;
   }

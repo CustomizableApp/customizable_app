@@ -1,6 +1,5 @@
 import 'package:customizable_app/core/app_contants.dart';
 import 'package:customizable_app/model/template_model.dart';
-import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/user.dart';
 import 'package:dio/dio.dart';
 
@@ -41,6 +40,29 @@ class UserService {
 
       for (Map map in dataList) {
         templates.add(TemplateModel.fromMap(map["usersTemplates"]));
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      return templates;
+    }
+  }
+
+  Future<List<TemplateModel>> getUsersAssignedRecordsTemplate(
+      String userId) async {
+    Map<String, dynamic> data = {
+      "user_id": userId,
+    };
+    List<TemplateModel> templates = List.empty(growable: true);
+    try {
+      Response response = await Dio().get(
+          AppConstants.apiUrl + "/getUsersAssignedRecordsTemplate",
+          queryParameters: data);
+      Map<String, dynamic> dataMap = response.data;
+      List dataList = dataMap["DB_record_role"];
+
+      for (Map map in dataList) {
+        templates.add(TemplateModel.fromMap(map["record_name"]["template"]));
       }
     } catch (e) {
       print(e);
