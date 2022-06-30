@@ -242,15 +242,16 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
             LikeDislikeCommentItemModel likeDislikeCommentItems =
                 await FieldService.instance
                     .getLikeDislikeCommentData(widget.record.datas![i].fieldId);
-            LikeDislikeCommentWidget voteFieldWidget = LikeDislikeCommentWidget(
+            LikeDislikeCommentWidget likeDislikeCommentWidget =
+                LikeDislikeCommentWidget(
               widget.record.datas![i].id,
               widget.record.datas![i].fieldId,
               widget.record.datas![i].name,
               likeDislikeCommentItems,
               permissionList[1],
             );
-            functions.add(voteFieldWidget.updateTrigger);
-            recordDatas.add(voteFieldWidget);
+            functions.add(likeDislikeCommentWidget.updateTrigger);
+            recordDatas.add(likeDislikeCommentWidget);
             break;
           }
           break;
