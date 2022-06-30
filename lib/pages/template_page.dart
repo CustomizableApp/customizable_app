@@ -80,8 +80,11 @@ class _TemplatePageState extends State<TemplatePage> {
                       ),
                     ],
                   ),
-            const Text("Records:"),
-            FutureBuilder(
+                  UserService.instance.currentUser!.type==0?
+            Column(
+              children: [
+                const Text("Records:"),
+                FutureBuilder(
               future: UserService.instance.getUsersAssignedRecordsTemplate(
                   AuthenticationService.instance.getUserId()),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -108,6 +111,9 @@ class _TemplatePageState extends State<TemplatePage> {
                 }
               },
             ),
+              ],
+            ):Container(),
+            
           ],
         ),
       ),

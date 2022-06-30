@@ -8,25 +8,34 @@ import 'package:flutter/material.dart';
 
 //TODO UI IMPROVEMENTS
 class TemplateContainer extends StatelessWidget {
-  const TemplateContainer({
+  TemplateContainer({
     Key? key,
     required this.template,
   }) : super(key: key);
   final TemplateModel template;
+  int userType=-1;
+
+  checkUserType() async{
+    if(userType==-1){
+      userType=await  UserService.instance.getCurrentUserType();
+      return userType;
+    }else{
+      return userType;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () async {
+          checkUserType();
           template.tools =
               await FieldService.instance.getToolsByTemplateId(template.id);
           template.roles =
               await FieldService.instance.getRolesByTemplateId(template.id);
               
-          if (await UserService.instance.getCurrentUserType() == 2) {
-            
-            //IF USER IS ADMIN
+          if (userType==2 ||userType == 1) {
             template.records =
                 await FieldService.instance.getRecordsByTemplateId(template);
           } else {
