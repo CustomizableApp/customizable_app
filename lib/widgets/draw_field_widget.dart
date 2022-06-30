@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
@@ -11,7 +12,9 @@ class DrawFieldWidget extends StatefulWidget {
     this.name,
     this.fieldId,
     this.base64String,
-    this.recordID, {
+    this.recordID,
+    this.isReadable,
+    this.isWritable, {
     Key? key,
   }) : super(key: key) {
     oldBase64String = base64String;
@@ -20,6 +23,8 @@ class DrawFieldWidget extends StatefulWidget {
   final String name;
   String recordID;
   String base64String = "";
+  bool isReadable=true;
+  bool isWritable=true;
   late String oldBase64String;
   String? fieldId;
   bool hasChanged = false;
@@ -58,7 +63,7 @@ class DrawFieldWidget extends StatefulWidget {
     var jsonObject = jsonEncode(base64String);
     await FieldService.instance.updateDrawFieldData(fieldId, jsonObject);
     if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
     }
   }
 }
@@ -178,6 +183,13 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                                       onPressed: () async {
                                         widget._signaturePadKey.currentState!
                                             .clear();
+                                      }),
+                                      ElevatedButton(
+                                      child: const Text("CLOSE"),
+                                      onPressed: () async {
+                                        setState(() {
+                                          widget.isDrawPadOpen=false;
+                                        });
                                       }),
                                 ],
                               ),

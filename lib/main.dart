@@ -2,6 +2,7 @@ import 'package:customizable_app/firebase_options.dart';
 import 'package:customizable_app/login/login_page.dart';
 import 'package:customizable_app/pages/template_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
+import 'package:customizable_app/service/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,10 @@ Future<void> main() async {
   );
 
   AuthenticationService.authInit();
+  if(FirebaseAuth.instance.currentUser?.uid != null){
+    await UserService.instance.getCurrentUser();
+
+  }
   runApp(const MyApp());
 }
 

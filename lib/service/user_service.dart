@@ -1,10 +1,12 @@
 import 'package:customizable_app/core/app_contants.dart';
 import 'package:customizable_app/model/template_model.dart';
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/user.dart';
 import 'package:dio/dio.dart';
 
 class UserService {
   static final UserService _instance = UserService._init();
+  UserModel? currentUser;
   UserService._init();
 
   static UserService get instance {
@@ -25,6 +27,30 @@ class UserService {
     }
     return users;
   }
+  getCurrentUserType() async {
+    if(currentUser==null){
+      await getCurrentUser();
+      return currentUser!.type;
+    }
+    else{
+      return currentUser!.type;
+    }
+  }
+
+   Future<void> getCurrentUser() async {
+    Map<String, dynamic> data = {
+      "user_id": AuthenticationService.instance.getUserId(),
+    };
+    try {
+      Response response = await Dio()
+          .get(AppConstants.apiUrl + "/getUserByUserId", queryParameters: data);
+      Map<String, dynamic> dataMap = response.data;
+      List dataList = dataMap["DB_user"];
+      currentUser = UserModel.fromMap(dataList.first);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<List<TemplateModel>> getTemplatesByUserId(String userId) async {
     Map<String, dynamic> data = {
@@ -40,6 +66,44 @@ class UserService {
 
       for (Map map in dataList) {
         templates.add(TemplateModel.fromMap(map["usersTemplates"]));
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      return templates;
+    }
+  }
+
+  Future<String> getUserNameByID(String userId) async {
+    Map<String, dynamic> data = {
+      "user_id": userId,
+    };
+    String name="";
+    try {
+      Response response = await Dio().get(
+          AppConstants.apiUrl + "/getUserNameByID",
+          queryParameters: data);
+      Map<String, dynamic> dataMap = response.data;
+      List dataList = dataMap["DB_user"];
+      name=dataList[0]["name"]+" "+dataList[0]["surname"];
+    } catch (e) {
+      print(e);
+      return "";
+    } 
+    return name;
+  }
+  Future<List<TemplateModel>> getAllTemplates() async {
+    
+    List<TemplateModel> templates = List.empty(growable: true);
+    try {
+      Response response = await Dio().get(
+          AppConstants.apiUrl + "/getAllTemplates",
+          );
+      Map<String, dynamic> dataMap = response.data;
+      List dataList = dataMap["DB_template"];
+
+      for (Map<String,dynamic> map in dataList) {
+        templates.add(TemplateModel.fromMap(map));
       }
     } catch (e) {
       print(e);

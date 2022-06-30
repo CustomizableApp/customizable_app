@@ -1,5 +1,6 @@
 import 'package:customizable_app/model/template_model.dart';
 import 'package:customizable_app/pages/create_record_page.dart';
+import 'package:customizable_app/service/user_service.dart';
 import 'package:customizable_app/widgets/record_container.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +21,9 @@ class _RecordPageState extends State<RecordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Record Page"),
+        title:Text(widget.template.name),
         actions: [
+          UserService.instance.currentUser!.type==0?Container():
           IconButton(
               onPressed: () {
                 createNewRecordDialog();

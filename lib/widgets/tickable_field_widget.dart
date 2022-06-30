@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 
 class TickableFieldWidet extends StatefulWidget {
   TickableFieldWidet(this.id, this.fieldId, this.name, this.tickableItems,
+  this.isReadable,
+    this.isWritable,
       {Key? key})
       : super(key: key);
   final String id;
   final String name;
   String? fieldId;
+  bool isReadable=true;
+  bool isWritable=true;
   List<TickableFieldItemModel>? tickableItems;
   bool hasChanged = false;
   bool isCreated = false;

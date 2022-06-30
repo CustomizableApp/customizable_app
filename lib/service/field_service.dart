@@ -71,6 +71,30 @@ class FieldService {
     return text;
   }
 
+  Future<List> getReadAndWrite(String toolID) async {
+    Map<String, dynamic> data = {
+      "tool_id": toolID,
+    };
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getReadAndWriteByToolID",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List list = dataMap["DB_tool_role"];
+    return list;
+  }
+  Future<List> getUserRoleID(String recordID,String userID) async {
+    Map<String, dynamic> data = {
+      "record_id": recordID,
+      "user_id": userID,
+    };
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getUserRoleID",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List list = dataMap["DB_record_role"];
+    return list;
+  }
+
   Future<bool> updateTextFieldData(String fieldId, String text) async {
     Map<String, dynamic> data = {
       "field_id": fieldId,

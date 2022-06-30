@@ -9,7 +9,7 @@ class AuthenticationService {
   FirebaseAuth? _auth;
   static final AuthenticationService _authInstance =
       AuthenticationService._init();
-  static UserModel user = UserModel(type: -1);
+ 
   AuthenticationService._init();
 
   static AuthenticationService get instance {
@@ -25,14 +25,6 @@ class AuthenticationService {
     await _auth?.signOut();
   }
 
-  Future<UserModel?> getUser() async {
-    if (user.type != -1) {
-      return user;
-    } else {
-      return await getUserApi();
-    }
-  }
-
   String getUserId() {
     return _auth?.currentUser?.uid ?? "";
   }
@@ -46,7 +38,7 @@ class AuthenticationService {
       );
       if (userCredential.user?.uid != null) {
         isLoggedIn = true;
-        user = (await getUserApi())!;
+        
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -59,21 +51,7 @@ class AuthenticationService {
     return isLoggedIn;
   }
 
-  Future<UserModel?> getUserApi() async {
-    Map<String, dynamic> data = {
-      "user_id": AuthenticationService.instance.getUserId(),
-    };
-    try {
-      Response response = await Dio()
-          .get(AppConstants.apiUrl + "/getUserByUserId", queryParameters: data);
-      Map<String, dynamic> dataMap = response.data;
-      List dataList = dataMap["DB_user"];
-      user = UserModel.fromMap(dataList.first);
-      return UserModel.fromMap(dataList.first);
-    } catch (e) {
-      print(e);
-    }
-  }
+
 
   Future<bool> signInWithMail(
       String? name, String? surname, String email, String password) async {

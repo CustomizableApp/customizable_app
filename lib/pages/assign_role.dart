@@ -65,11 +65,25 @@ class _AssignRolePageState extends State<AssignRolePage> {
                         List.empty(growable: true);
 
                     for (UserModel user in users) {
-                      userCheckboxItems.add(UserCheckboxItem(
+                      if(UserService.instance.currentUser!.type==0 ){
+                        if(assignedUserIds.contains(user.id)){
+                          userCheckboxItems.add(UserCheckboxItem(
                           widget.record.roles![index].id,
                           user,
                           widget.record.id,
                           assignedUserIds.contains(user.id)));
+                        }
+                        else{
+
+                        }
+                      }else{
+                        userCheckboxItems.add(UserCheckboxItem(
+                          widget.record.roles![index].id,
+                          user,
+                          widget.record.id,
+                          assignedUserIds.contains(user.id)));
+                      }
+                      
                     }
                     return RoleButton(widget.record.roles![index],
                         userCheckboxItems, widget.record.id);

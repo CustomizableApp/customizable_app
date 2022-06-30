@@ -46,7 +46,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               null,
               "",
               "",
-              controller);
+              controller,
+              true);
 
           functions.add(textFieldWidget.createTrigger);
 
@@ -55,13 +56,14 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 2:
           final DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-            widget.template.tools![i].id,
-            widget.template.tools![i].name,
-            DateTime(2000, 1, 1),
-            DateTime(2000, 1, 1),
-            null,
-            "",
-          );
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              DateTime(2000, 1, 1),
+              DateTime(2000, 1, 1),
+              null,
+              "",
+              true,
+              true);
 
           functions.add(dateIntervalWidget.createTrigger);
 
@@ -70,12 +72,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 3:
           DateFieldWidget dateFieldWidget = DateFieldWidget(
-            widget.template.tools![i].id,
-            widget.template.tools![i].name,
-            DateTime(2000, 1, 1),
-            null,
-            "",
-          );
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              DateTime(2000, 1, 1),
+              null,
+              "",
+              true,
+              true);
 
           functions.add(dateFieldWidget.createTrigger);
 
@@ -83,12 +86,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
           break;
         case 4:
           CounterFieldWidget counterFieldWidget = CounterFieldWidget(
-            widget.template.tools![i].id,
-            widget.template.tools![i].name,
-            null,
-            0,
-            "",
-          );
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              null,
+              0,
+              "",
+              true,
+              true);
 
           functions.add(counterFieldWidget.createTrigger);
 
@@ -97,12 +101,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 5:
           ImageFieldWidget imageFieldWidget = ImageFieldWidget(
-            widget.template.tools![i].id,
-            widget.template.tools![i].name,
-            null,
-            "",
-            "",
-          );
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              null,
+              "",
+              "",
+              true,
+              true);
 
           functions.add(imageFieldWidget.createTrigger);
 
@@ -111,12 +116,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 6:
           DrawFieldWidget drawFieldWidget = DrawFieldWidget(
-            widget.template.tools![i].id,
-            widget.template.tools![i].name,
-            null,
-            "",
-            "",
-          );
+              widget.template.tools![i].id,
+              widget.template.tools![i].name,
+              null,
+              "",
+              "",
+              true,
+              true);
 
           functions.add(drawFieldWidget.createTrigger);
 
@@ -128,7 +134,9 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].id,
               null,
               widget.template.tools![i].name,
-              null);
+              null,
+              true,
+              true);
 
           functions.add(voteFieldWidget.createTrigger);
           templateTools.add(voteFieldWidget);
@@ -138,7 +146,9 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].id,
               null,
               widget.template.tools![i].name,
-              null);
+              null,
+              true,
+              true);
           functions.add(tickableFieldWidget.createTrigger);
           templateTools.add(tickableFieldWidget);
           break;

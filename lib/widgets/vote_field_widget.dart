@@ -3,14 +3,18 @@ import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
 class VoteFieldWidget extends StatefulWidget {
-  VoteFieldWidget(this.id, this.fieldId, this.name, this.voteItems, {Key? key})
+  VoteFieldWidget(this.id, this.fieldId, this.name, this.voteItems, this.isReadable,
+    this.isWritable,{Key? key})
       : super(key: key);
   final String id;
   final String name;
   String? fieldId;
+  bool isReadable=true;
+  bool isWritable=true;
   List<VoteFieldItemModel>? voteItems;
   bool hasChanged = false;
   bool isCreated = false;
+  bool isVoted=false;
 
   @override
   _VoteFieldWidgetState createState() => _VoteFieldWidgetState();
@@ -86,6 +90,9 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
                   voteItem = VoteFieldItemModel(id: "", text: text, count: 0);
                 }
                 widget.voteItems!.add(voteItem);
+                setState(() {
+                  
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -126,23 +133,36 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
                             child: Text("Click + button to add new vote item"),
                           )
                         : SizedBox(
-                            height: 100,
-                            width: 300,
+                            width: MediaQuery.of(context).size.width*0.95,
                             child: ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
                                 padding: const EdgeInsets.all(8),
                                 itemCount: widget.voteItems!.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(widget.voteItems![index].text,
-                                          style: const TextStyle(fontSize: 20)),
-                                      Text(
-                                          widget.voteItems![index].count
-                                              .toString(),
-                                          style: const TextStyle(fontSize: 20))
-                                    ],
+                                  return Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(widget.voteItems![index].text,
+                                            style: const TextStyle(fontSize: 20)),
+                                            widget.isVoted?Container():
+
+                                            ElevatedButton(
+                                        child: const Text("VOTE"),
+                                        onPressed: ()  {
+                                          setState(() {
+                                            widget.voteItems![index].count++;
+                                            widget.isVoted=true;
+                                          });
+                                        }),
+                                        Text(
+                                            widget.voteItems![index].count
+                                                .toString(),
+                                            style: const TextStyle(fontSize: 20))
+                                      ],
+                                    ),
                                   );
                                 }),
                           ),

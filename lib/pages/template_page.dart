@@ -14,9 +14,21 @@ class TemplatePage extends StatefulWidget {
 }
 
 class _TemplatePageState extends State<TemplatePage> {
+  int userType = -1;
+
+  Future<void> getCurrentUserType() async {
+    await UserService.instance.getCurrentUser();
+    userType = await UserService.instance.getCurrentUserType();
+    setState(() {
+      
+    });
+  }
+
+
   @override
   void initState() {
-    // TODO: implement initState
+   getCurrentUserType();
+
     super.initState();
   }
 
@@ -24,40 +36,50 @@ class _TemplatePageState extends State<TemplatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Template Page"),
+        title: const Text("Home Page"),
         centerTitle: true,
       ),
       body: Center(
         child: Column(
           children: [
-            const Text("Templates:"),
-            FutureBuilder(
-              future: UserService.instance.getTemplatesByUserId(
-                  AuthenticationService.instance.getUserId()),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  List<TemplateModel> data = snapshot.data;
-                  if (data.isNotEmpty) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return TemplateContainer(template: data[index]);
-                      },
-                    );
-                  } else {
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text("No templates to display"),
+            userType == 0
+                ? Container()
+                : Column(
+                    children: [
+                      const Text("Templates:"),
+                      FutureBuilder(
+                        future: userType == 2
+                            ? UserService.instance.getAllTemplates()
+                            : UserService.instance.getTemplatesByUserId(
+                                AuthenticationService.instance.getUserId()),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            List<TemplateModel> data = snapshot.data;
+                            if (data.isNotEmpty) {
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return TemplateContainer(
+                                      template: data[index]);
+                                },
+                              );
+                            } else {
+                              return const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text("No templates to display"),
+                                ),
+                              );
+                            }
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
                       ),
-                    );
-                  }
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
-            ),
+                    ],
+                  ),
             const Text("Records:"),
             FutureBuilder(
               future: UserService.instance.getUsersAssignedRecordsTemplate(

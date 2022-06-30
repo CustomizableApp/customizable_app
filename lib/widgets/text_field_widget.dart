@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/widgets/feed_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,15 @@ class TextFieldWidget extends StatefulWidget {
     this.fieldId,
     this.text,
     this.recordID,
-    this.controller, {
+    this.controller,
+    this.isWritable, {
     Key? key,
   }) : super(key: key);
   final String id;
   final String name;
   String recordID;
+
+  bool isWritable = true;
   String text;
   String? fieldId;
   final TextEditingController controller;
@@ -52,8 +56,9 @@ class TextFieldWidget extends StatefulWidget {
   Future<void> updateData(String fieldId) async {
     await FieldService.instance.updateTextFieldData(fieldId, controller.text);
     //TODO CONSTANT USER ID
-    if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+    if (recordID != "") {
+      await FieldService.instance.createFeedData(
+          jsonEncode(AuthenticationService.instance.getUserId() + " edited " + name), 4, recordID, "sehaId");
     }
   }
 }
@@ -84,6 +89,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 border: InputBorder.none,
               ),
               controller: widget.controller,
+              readOnly: widget.isWritable ? false : true,
             ),
           )
         ],

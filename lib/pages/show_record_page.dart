@@ -5,7 +5,9 @@ import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/tickable_field_item_model.dart';
 import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/pages/assign_role.dart';
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
+import 'package:customizable_app/service/user_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
@@ -41,28 +43,52 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
     setState(() {});
   }
 
+  Future<List<bool>> checkReadAndWrite(String toolID) async {
+    List<bool> readAndWrite = [];
+    readAndWrite.add(true);
+    readAndWrite.add(true);
+    List roleList = await FieldService.instance.getReadAndWrite(toolID);
+    List userRoleID = await FieldService.instance.getUserRoleID(
+        widget.record.id, AuthenticationService.instance.getUserId());
+    for (int i = 0; i < roleList.length; i++) {
+      if (roleList[i]["role_id"] == userRoleID[0]["role_id"]) {
+        readAndWrite[0] = roleList[i]["read"];
+        readAndWrite[1] = roleList[i]["write"];
+      }
+    }
+    return readAndWrite;
+  }
+
   Future<void> getToolDatas() async {
     for (int i = 0; i < widget.record.datas!.length; i++) {
       switch (widget.record.datas![i].type) {
         case 1:
-          String text = await FieldService.instance
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
+              if(permissionList[0]){
+                String text = await FieldService.instance
               .getTextFieldData(widget.record.datas![i].fieldId);
           TextEditingController controller = TextEditingController();
           controller.text = text;
           TextFieldWidget textFieldWidget = TextFieldWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].name,
-            widget.record.datas![i].fieldId,
-            text,
-            widget.record.id,
-            controller,
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].name,
+              widget.record.datas![i].fieldId,
+              text,
+              widget.record.id,
+              controller,
+              permissionList[1]);
 
           functions.add(textFieldWidget.updateTrigger);
           recordDatas.add(textFieldWidget);
           break;
+              }
+              break;
+          
 
         case 2:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           List<DateTime> dateList = await FieldService.instance
               .getIntervalDateFieldData(widget.record.datas![i].fieldId);
           DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
@@ -71,7 +97,9 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               dateList[0],
               dateList[1],
               widget.record.datas![i].fieldId,
-              widget.record.id);
+              widget.record.id,
+              permissionList[0],
+              permissionList[1]);
 
           functions.add(dateIntervalWidget.updateTrigger);
 
@@ -79,6 +107,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           break;
 
         case 3:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           DateTime date = await FieldService.instance
               .getDateFieldData(widget.record.datas![i].fieldId);
           DateFieldWidget dateFieldWidget = DateFieldWidget(
@@ -86,7 +116,9 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               widget.record.datas![i].name,
               date,
               widget.record.datas![i].fieldId,
-              widget.record.id);
+              widget.record.id,
+              permissionList[0],
+              permissionList[1]);
 
           functions.add(dateFieldWidget.updateTrigger);
 
@@ -94,6 +126,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           break;
 
         case 4:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           int? counter = await FieldService.instance
               .getCounterFieldData(widget.record.datas![i].fieldId);
           CounterFieldWidget counterFieldWidget = CounterFieldWidget(
@@ -101,13 +135,17 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               widget.record.datas![i].name,
               widget.record.datas![i].fieldId,
               counter!,
-              widget.record.id);
+              widget.record.id,
+              permissionList[0],
+              permissionList[1]);
 
           functions.add(counterFieldWidget.updateTrigger);
           recordDatas.add(counterFieldWidget);
           break;
 
         case 5:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           String? jsonObj = await FieldService.instance
               .getImageFieldData(widget.record.datas![i].fieldId);
           String base64String = jsonDecode(jsonObj!);
@@ -116,13 +154,17 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               widget.record.datas![i].name,
               widget.record.datas![i].fieldId,
               base64String,
-              widget.record.id);
+              widget.record.id,
+              permissionList[0],
+              permissionList[1]);
 
           functions.add(imageFieldWidget.updateTrigger);
           recordDatas.add(imageFieldWidget);
           break;
 
         case 6:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           String? jsonObj = await FieldService.instance
               .getDrawFieldData(widget.record.datas![i].fieldId);
           String base64String = jsonDecode(jsonObj!);
@@ -131,35 +173,43 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               widget.record.datas![i].name,
               widget.record.datas![i].fieldId,
               base64String,
-              widget.record.id);
+              widget.record.id,
+              permissionList[0],
+              permissionList[1]);
 
           functions.add(drawFieldWidget.updateTrigger);
           recordDatas.add(drawFieldWidget);
           break;
 
         case 7:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           List<VoteFieldItemModel> voteItemList = await FieldService.instance
               .getVoteFieldData(widget.record.datas![i].fieldId);
           VoteFieldWidget voteFieldWidget = VoteFieldWidget(
-            widget.record.datas![i].id,
-            widget.record.datas![i].fieldId,
-            widget.record.datas![i].name,
-            voteItemList,
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].fieldId,
+              widget.record.datas![i].name,
+              voteItemList,
+              permissionList[0],
+              permissionList[1]);
 
           functions.add(voteFieldWidget.updateTrigger);
           recordDatas.add(voteFieldWidget);
           break;
         case 8:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
           List<TickableFieldItemModel> tickableItemList = await FieldService
               .instance
               .getTickableFieldData(widget.record.datas![i].fieldId);
           TickableFieldWidet voteFieldWidget = TickableFieldWidet(
-            widget.record.datas![i].id,
-            widget.record.datas![i].fieldId,
-            widget.record.datas![i].name,
-            tickableItemList,
-          );
+              widget.record.datas![i].id,
+              widget.record.datas![i].fieldId,
+              widget.record.datas![i].name,
+              tickableItemList,
+              permissionList[0],
+              permissionList[1]);
           functions.add(voteFieldWidget.updateTrigger);
           recordDatas.add(voteFieldWidget);
           break;

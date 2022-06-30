@@ -3,6 +3,7 @@ import 'package:customizable_app/pages/record_page.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:customizable_app/service/user.dart';
+import 'package:customizable_app/service/user_service.dart';
 import 'package:flutter/material.dart';
 
 //TODO UI IMPROVEMENTS
@@ -18,12 +19,13 @@ class TemplateContainer extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () async {
-          UserModel? user = await AuthenticationService.instance.getUser();
           template.tools =
               await FieldService.instance.getToolsByTemplateId(template.id);
           template.roles =
               await FieldService.instance.getRolesByTemplateId(template.id);
-          if (user!.type == 2) {
+              
+          if (await UserService.instance.getCurrentUserType() == 2) {
+            
             //IF USER IS ADMIN
             template.records =
                 await FieldService.instance.getRecordsByTemplateId(template);

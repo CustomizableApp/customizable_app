@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:path/path.dart' as path;
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class ImageFieldWidget extends StatefulWidget {
     this.fieldId,
     this.base64String,
     this.recordID,
+    this.isReadable,
+    this.isWritable,
      {
     Key? key,
   }) : super(key: key) {
@@ -29,6 +32,8 @@ class ImageFieldWidget extends StatefulWidget {
   final String name;
   String base64String="";
   String? fieldId;
+  bool isReadable=true;
+  bool isWritable=true;
   String recordID;
   bool hasChanged = false;
   bool isCreated = false;
@@ -65,7 +70,7 @@ class ImageFieldWidget extends StatefulWidget {
     var jsonObject=jsonEncode(base64String);
     await FieldService.instance.updateImageFieldData(fieldId, jsonObject);
     if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
     }
   }
 }

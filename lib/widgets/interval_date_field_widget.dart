@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -12,7 +13,9 @@ class DateIntervalWidget extends StatefulWidget {
     this.firstDate,
     this.secondDate,
     this.fieldId,
-    this.recordID, {
+    this.recordID,
+    this.isReadable,
+    this.isWritable, {
     Key? key,
   }) : super(key: key) {
     oldFirstDate=firstDate;
@@ -24,6 +27,8 @@ class DateIntervalWidget extends StatefulWidget {
   DateTime firstDate;
   DateTime secondDate;
   String? fieldId;
+  bool isReadable=true;
+  bool isWritable=true;
   String recordID;
   bool hasChanged = false;
   bool isCreated = false;
@@ -56,7 +61,7 @@ class DateIntervalWidget extends StatefulWidget {
     await FieldService.instance
         .updateIntervalDateFieldData(fieldId, firstDate, secondDate);
         if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
     }
   }
 

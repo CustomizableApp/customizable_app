@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -11,7 +12,9 @@ class DateFieldWidget extends StatefulWidget {
     this.name,
     this.date,
     this.fieldId,
-    this.recordID, {
+    this.recordID,
+    this.isReadable,
+    this.isWritable, {
     Key? key,
   }) : super(key: key) {
    oldDate=date;
@@ -19,6 +22,8 @@ class DateFieldWidget extends StatefulWidget {
   final String id;
   final String name;
   String recordID;
+  bool isReadable=true;
+  bool isWritable=true;
   //THEY NEED TO BE NULLABLE
   DateTime date;
   late DateTime oldDate;
@@ -50,7 +55,7 @@ class DateFieldWidget extends StatefulWidget {
   updateData(String fieldId) async {
     await FieldService.instance.updateDateFieldData(fieldId, date);
     if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode("sehaId"+" edited "+ name), 4, recordID, "sehaId");
+      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
     }
   }
 
