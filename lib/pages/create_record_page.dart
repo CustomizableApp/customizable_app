@@ -63,7 +63,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               null,
               "",
               true,
-              true);
+              );
 
           functions.add(dateIntervalWidget.createTrigger);
 
@@ -78,7 +78,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               null,
               "",
               true,
-              true);
+              );
 
           functions.add(dateFieldWidget.createTrigger);
 
@@ -92,7 +92,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               0,
               "",
               true,
-              true);
+              );
 
           functions.add(counterFieldWidget.createTrigger);
 
@@ -107,7 +107,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               "",
               "",
               true,
-              true);
+              );
 
           functions.add(imageFieldWidget.createTrigger);
 
@@ -122,7 +122,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               "",
               "",
               true,
-              true);
+              );
 
           functions.add(drawFieldWidget.createTrigger);
 
@@ -136,7 +136,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               null,
               true,
-              true);
+              false);
 
           functions.add(voteFieldWidget.createTrigger);
           templateTools.add(voteFieldWidget);
@@ -148,7 +148,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               null,
               true,
-              true);
+              );
           functions.add(tickableFieldWidget.createTrigger);
           templateTools.add(tickableFieldWidget);
           break;

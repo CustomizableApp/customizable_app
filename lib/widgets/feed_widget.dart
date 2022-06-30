@@ -25,6 +25,32 @@ class _FeedWidgetState extends State<FeedWidget> {
     return await UserService.instance.getUserNameByID(userID);
   }
 
+  MainAxisAlignment isCurrentUserMain(String userID) {
+    if (userID == AuthenticationService.instance.getUserId()) {
+      return MainAxisAlignment.end;
+    }
+    else{
+      return MainAxisAlignment.start;
+    }
+  }
+  CrossAxisAlignment isCurrentUserCross(String userID) {
+    if (userID == AuthenticationService.instance.getUserId()) {
+      return CrossAxisAlignment.end;
+    }
+    else{
+      return CrossAxisAlignment.start;
+    }
+  }
+  bool isCurrentUser(String userID){
+    if (userID == AuthenticationService.instance.getUserId()) {
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,22 +64,17 @@ class _FeedWidgetState extends State<FeedWidget> {
           children: [
             ListView.builder(
                 shrinkWrap: true,
-                itemCount:
-                    widget.feedData == null ? 0 : widget.feedData.length,
-                    primary: false,
+                itemCount: widget.feedData == null ? 0 : widget.feedData.length,
+                primary: false,
                 itemBuilder: (BuildContext context, int index) {
                   switch (widget.feedData[index].contentType) {
                     case 1:
-                      String text =
-                          jsonDecode(widget.feedData[index].content);
+                      String text = jsonDecode(widget.feedData[index].content);
                       String id = widget.feedData[index].userID;
 
                       return SingleChildScrollView(
                         child: Row(
-                          mainAxisAlignment: widget.feedData[index].userID ==
-                                  AuthenticationService.instance.getUserId()
-                              ? MainAxisAlignment.end
-                              : MainAxisAlignment.start,
+                          mainAxisAlignment: isCurrentUserMain(widget.feedData[index].userID),
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -65,16 +86,38 @@ class _FeedWidgetState extends State<FeedWidget> {
                                       AsyncSnapshot snapshot) {
                                     if (snapshot.hasData) {
                                       String data = snapshot.data;
-                                        return Column(
-                                          children: [
-                                            Text(data),
-                                            Text(
-                                              text,
-                                              overflow: TextOverflow.clip,
-                                              style: TextStyle(fontSize: 18),
+                                      return Column(
+                                        crossAxisAlignment: isCurrentUserCross(widget.feedData[index].userID),
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(data),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.87,
+
+                                            child: Padding(
+                                              padding: isCurrentUser(widget.feedData[index].userID)? const EdgeInsets.only(left:50.0):
+                                              const EdgeInsets.only(right:50.0),
+                                              child: Column(
+                                                crossAxisAlignment: isCurrentUserCross(widget.feedData[index].userID),
+                                                children: [
+                                                  Text(
+                                                    text,
+                                                    overflow: TextOverflow.clip,
+                                                    style:
+                                                        TextStyle(fontSize: 18),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ],
-                                        );
+                                          ),
+                                        ],
+                                      );
                                     } else {
                                       return const CircularProgressIndicator();
                                     }
@@ -86,8 +129,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                         ),
                       );
                     case 4:
-                      String text =
-                          jsonDecode(widget.feedData[index].content);
+                      String text = jsonDecode(widget.feedData[index].content);
 
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,

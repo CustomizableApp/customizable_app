@@ -1,15 +1,15 @@
 import 'package:customizable_app/model/vote_field_item.dart';
+import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
 class VoteFieldWidget extends StatefulWidget {
-  VoteFieldWidget(this.id, this.fieldId, this.name, this.voteItems, this.isReadable,
-    this.isWritable,{Key? key})
+  VoteFieldWidget(this.id, this.fieldId, this.name, this.voteItems,
+    this.isWritable,this.isVoted,{Key? key})
       : super(key: key);
   final String id;
   final String name;
   String? fieldId;
-  bool isReadable=true;
   bool isWritable=true;
   List<VoteFieldItemModel>? voteItems;
   bool hasChanged = false;
@@ -151,8 +151,11 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
 
                                             ElevatedButton(
                                         child: const Text("VOTE"),
-                                        onPressed: ()  {
-                                          setState(() {
+                                        onPressed: ()  async{
+                                          await FieldService.instance.createVoteFieldVoter(AuthenticationService.instance.getUserId(), widget.fieldId!);
+                                          await FieldService.instance.updateVoteItem(widget.voteItems![index].id);
+                                          setState(()  {
+
                                             widget.voteItems![index].count++;
                                             widget.isVoted=true;
                                           });

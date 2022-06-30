@@ -82,14 +82,14 @@ class FieldService {
     List list = dataMap["DB_tool_role"];
     return list;
   }
-  Future<List> getUserRoleID(String recordID,String userID) async {
+
+  Future<List> getUserRoleID(String recordID, String userID) async {
     Map<String, dynamic> data = {
       "record_id": recordID,
       "user_id": userID,
     };
-    Response response = await Dio().get(
-        AppConstants.apiUrl + "/getUserRoleID",
-        queryParameters: data);
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getUserRoleID", queryParameters: data);
     Map<String, dynamic> dataMap = response.data;
     List list = dataMap["DB_record_role"];
     return list;
@@ -127,6 +127,25 @@ class FieldService {
     return dateList;
   }
 
+  Future<bool> getIsVoted(String userID, String voteFieldID) async {
+    Map<String, dynamic> data = {
+      "user_id": userID,
+      "vote_field_id": voteFieldID,
+    };
+
+    bool isVoted = false;
+    Response response = await Dio()
+        .get(AppConstants.apiUrl + "/getIsUserVoted", queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List dataList = dataMap["DB_vote_field_voter"];
+    if (dataList.isEmpty) {
+      return isVoted;
+    } else {
+      isVoted = true;
+      return isVoted;
+    }
+  }
+
   Future<bool> updateIntervalDateFieldData(
       String fieldId, DateTime firstDate, DateTime secondDate) async {
     Map<String, dynamic> data = {
@@ -146,9 +165,18 @@ class FieldService {
     return status;
   }
 
+  Future<void> updateVoteItem(String voteItemID) async {
+    Map<String, dynamic> data = {
+      "vote_item_id": voteItemID,
+      //db de datetime olarak updatelenmeli
+    };
+        await Dio().post(AppConstants.apiUrl + "/updateVoteItem", data: data);
+  }
+
   Future<String?> createRecord(String name, String templateId) async {
     //TODO CONSTANT VALUE HERE
-    String creatorId = "sehaId"; //user serviceten alinacak
+    String creatorId =
+        AuthenticationService.instance.getUserId(); //user serviceten alinacak
     Map<String, dynamic> data = {
       "creator_id": creatorId,
       "template_id": templateId,
@@ -160,6 +188,18 @@ class FieldService {
     String id = response.data["insert_DB_record"]["returning"][0]["id"];
 
     return id;
+  }
+
+  Future<void> createVoteFieldVoter(String userID, String voteFieldID) async {
+    //TODO CONSTANT VALUE HERE
+    String creatorId = "sehaId"; //user serviceten alinacak
+    Map<String, dynamic> data = {
+      "user_id": userID,
+      "vote_field_id": voteFieldID,
+    };
+
+    Response response = await Dio()
+        .post(AppConstants.apiUrl + "/createVoteFieldVoter", data: data);
   }
 
   Future<String?> createData(String recordId, String toolId) async {

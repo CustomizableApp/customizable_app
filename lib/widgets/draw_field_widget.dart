@@ -6,6 +6,8 @@ import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
+import '../service/user_service.dart';
+
 class DrawFieldWidget extends StatefulWidget {
   DrawFieldWidget(
     this.id,
@@ -13,7 +15,6 @@ class DrawFieldWidget extends StatefulWidget {
     this.fieldId,
     this.base64String,
     this.recordID,
-    this.isReadable,
     this.isWritable, {
     Key? key,
   }) : super(key: key) {
@@ -23,7 +24,6 @@ class DrawFieldWidget extends StatefulWidget {
   final String name;
   String recordID;
   String base64String = "";
-  bool isReadable=true;
   bool isWritable=true;
   late String oldBase64String;
   String? fieldId;
@@ -67,6 +67,9 @@ class DrawFieldWidget extends StatefulWidget {
     }
   }
 }
+ Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
+  }
 
 class _DrawFieldWidgetState extends State<DrawFieldWidget> {
   Future<Image> openImage(String base64Verifier) async {

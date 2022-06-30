@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../service/user_service.dart';
+
 class DateFieldWidget extends StatefulWidget {
   DateFieldWidget(
     this.id,
@@ -13,7 +15,6 @@ class DateFieldWidget extends StatefulWidget {
     this.date,
     this.fieldId,
     this.recordID,
-    this.isReadable,
     this.isWritable, {
     Key? key,
   }) : super(key: key) {
@@ -22,7 +23,6 @@ class DateFieldWidget extends StatefulWidget {
   final String id;
   final String name;
   String recordID;
-  bool isReadable=true;
   bool isWritable=true;
   //THEY NEED TO BE NULLABLE
   DateTime date;
@@ -57,6 +57,9 @@ class DateFieldWidget extends StatefulWidget {
     if(recordID!=""){
       await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
     }
+  }
+   Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
   }
 
   @override

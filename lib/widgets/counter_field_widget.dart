@@ -4,6 +4,8 @@ import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
+import '../service/user_service.dart';
+
 class CounterFieldWidget extends StatefulWidget {
   CounterFieldWidget(
     this.id,
@@ -11,7 +13,6 @@ class CounterFieldWidget extends StatefulWidget {
     this.fieldId,
     this.counter,
     this.recordID,
-    this.isReadable,
     this.isWritable, {
     Key? key,
   }) : super(key: key) {
@@ -25,7 +26,6 @@ class CounterFieldWidget extends StatefulWidget {
   String? fieldId;
   bool hasChanged = false;
   bool isCreated = false;
-  bool isReadable=true;
   bool isWritable=true;
 
   @override
@@ -59,6 +59,9 @@ class CounterFieldWidget extends StatefulWidget {
     if(recordID!=""){
       await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
     }
+  }
+   Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
   }
 }
 

@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
 
+import '../service/user_service.dart';
+
 
 
 
@@ -21,7 +23,6 @@ class ImageFieldWidget extends StatefulWidget {
     this.fieldId,
     this.base64String,
     this.recordID,
-    this.isReadable,
     this.isWritable,
      {
     Key? key,
@@ -32,7 +33,6 @@ class ImageFieldWidget extends StatefulWidget {
   final String name;
   String base64String="";
   String? fieldId;
-  bool isReadable=true;
   bool isWritable=true;
   String recordID;
   bool hasChanged = false;
@@ -74,6 +74,9 @@ class ImageFieldWidget extends StatefulWidget {
     }
   }
 }
+ Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
+  }
 
 class _ImageFieldWidgetState extends State<ImageFieldWidget> {
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
+import 'package:customizable_app/service/user_service.dart';
 import 'package:customizable_app/widgets/feed_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -58,8 +59,11 @@ class TextFieldWidget extends StatefulWidget {
     //TODO CONSTANT USER ID
     if (recordID != "") {
       await FieldService.instance.createFeedData(
-          jsonEncode(AuthenticationService.instance.getUserId() + " edited " + name), 4, recordID, "sehaId");
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, "sehaId");
     }
+  }
+  Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
   }
 }
 
