@@ -8,6 +8,7 @@ import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
+import 'package:customizable_app/service/user_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
@@ -48,6 +49,9 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
     List<bool> readAndWrite = [];
     readAndWrite.add(true);
     readAndWrite.add(true);
+    if(UserService.instance.currentUser!.type==2){
+      return readAndWrite;
+    }
     List roleList = await FieldService.instance.getReadAndWrite(toolID);
     List userRoleID = await FieldService.instance.getUserRoleID(
         widget.record.id, AuthenticationService.instance.getUserId());
