@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:customizable_app/model/data_model.dart';
 import 'package:customizable_app/model/feed_data_model.dart';
+import 'package:customizable_app/model/like_dislike_comment_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/role_model.dart';
 import 'package:customizable_app/model/template_model.dart';
@@ -170,15 +171,12 @@ class FieldService {
       "vote_item_id": voteItemID,
       //db de datetime olarak updatelenmeli
     };
-        await Dio().post(AppConstants.apiUrl + "/updateVoteItem", data: data);
+    await Dio().post(AppConstants.apiUrl + "/updateVoteItem", data: data);
   }
 
-  Future<void> updateListItem(String listItemID,bool tick) async {
-    Map<String, dynamic> data = {
-      "list_item_id": listItemID,
-      "ticked":tick
-    };
-        await Dio().post(AppConstants.apiUrl + "/updateListItemTick", data: data);
+  Future<void> updateListItem(String listItemID, bool tick) async {
+    Map<String, dynamic> data = {"list_item_id": listItemID, "ticked": tick};
+    await Dio().post(AppConstants.apiUrl + "/updateListItemTick", data: data);
   }
 
   Future<String?> createRecord(String name, String templateId) async {
@@ -279,6 +277,52 @@ class FieldService {
     Response response = await Dio()
         .post(AppConstants.apiUrl + "/createTickableField", data: data);
     String id = response.data["insert_DB_tickable_field"]["returning"][0]["id"];
+    return id;
+  }
+
+  Future<String?> createLikeCommentDislikeField(String dataId) async {
+    Map<String, dynamic> data = {
+      "data_id": dataId,
+    };
+
+    Response response = await Dio().post(
+        AppConstants.apiUrl + "/createLikeCommentDislikeField",
+        data: data);
+    String id = response.data["insert_DB_like_comment_dislike_field"]
+        ["returning"][0]["id"];
+    return id;
+  }
+
+  Future<LikeDislikeCommentItemModel> getLikeDislikeCommentData(
+      String fieldId) async {
+    Map<String, dynamic> data = {
+      "field_id": fieldId,
+    };
+    List<LikeDislikeCommentItemModel> dataList = List.empty(growable: true);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getLikeCommentDislikeFieldData",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    for (int i = 0;
+        i < dataMap["DB_like_comment_dislike_field"][0]["comments"].length;
+        i++) {
+      dataList.add(LikeDislikeCommentItemModel.fromMap(
+          dataMap["DB_like_comment_dislike_field"][0]));
+    }
+
+    return dataList.first;
+  }
+
+  Future<String?> createComment(String fieldId, String comment) async {
+    Map<String, dynamic> data = {
+      "user_id": AuthenticationService.instance.getUserId(),
+      "l_c_d_field_id": fieldId,
+      "comment": comment,
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createComment", data: data);
+    String id = response.data["insert_DB_comment"]["returning"][0]["id"];
     return id;
   }
 

@@ -1,19 +1,20 @@
 import 'dart:convert';
 
 import 'package:customizable_app/model/feed_data_model.dart';
+import 'package:customizable_app/model/like_dislike_comment_model.dart';
 import 'package:customizable_app/model/record_model.dart';
 import 'package:customizable_app/model/tickable_field_item_model.dart';
 import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/pages/assign_role.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
-import 'package:customizable_app/service/user_service.dart';
 import 'package:customizable_app/utils/toast_util.dart';
 import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/date_field_widget.dart';
 import 'package:customizable_app/widgets/draw_field_widget.dart';
 import 'package:customizable_app/widgets/feed_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
+import 'package:customizable_app/widgets/like_comment_dislike_field_widget.dart';
 import 'package:customizable_app/widgets/vote_field_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -228,6 +229,26 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                 tickableItemList,
                 permissionList[1],
                 widget.record.id);
+            functions.add(voteFieldWidget.updateTrigger);
+            recordDatas.add(voteFieldWidget);
+            break;
+          }
+          break;
+
+        case 9:
+          List<bool> permissionList =
+              await checkReadAndWrite(widget.record.datas![i].id);
+          if (permissionList[0]) {
+            LikeDislikeCommentItemModel likeDislikeCommentItems =
+                await FieldService.instance
+                    .getLikeDislikeCommentData(widget.record.datas![i].fieldId);
+            LikeDislikeCommentWidget voteFieldWidget = LikeDislikeCommentWidget(
+              widget.record.datas![i].id,
+              widget.record.datas![i].fieldId,
+              widget.record.datas![i].name,
+              likeDislikeCommentItems,
+              permissionList[1],
+            );
             functions.add(voteFieldWidget.updateTrigger);
             recordDatas.add(voteFieldWidget);
             break;

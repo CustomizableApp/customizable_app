@@ -7,6 +7,7 @@ import 'package:customizable_app/widgets/counter_field_widget.dart';
 import 'package:customizable_app/widgets/draw_field_widget.dart';
 import 'package:customizable_app/widgets/image_field_widget.dart';
 import 'package:customizable_app/widgets/interval_date_field_widget.dart';
+import 'package:customizable_app/widgets/like_comment_dislike_field_widget.dart';
 import 'package:customizable_app/widgets/text_field_widget.dart';
 import 'package:customizable_app/widgets/vote_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -56,14 +57,14 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 2:
           final DateIntervalWidget dateIntervalWidget = DateIntervalWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              DateTime(2000, 1, 1),
-              DateTime(2000, 1, 1),
-              null,
-              "",
-              true,
-              );
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            DateTime(2000, 1, 1),
+            DateTime(2000, 1, 1),
+            null,
+            "",
+            true,
+          );
 
           functions.add(dateIntervalWidget.createTrigger);
 
@@ -72,13 +73,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 3:
           DateFieldWidget dateFieldWidget = DateFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              DateTime(2000, 1, 1),
-              null,
-              "",
-              true,
-              );
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            DateTime(2000, 1, 1),
+            null,
+            "",
+            true,
+          );
 
           functions.add(dateFieldWidget.createTrigger);
 
@@ -86,13 +87,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
           break;
         case 4:
           CounterFieldWidget counterFieldWidget = CounterFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              null,
-              0,
-              "",
-              true,
-              );
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            null,
+            0,
+            "",
+            true,
+          );
 
           functions.add(counterFieldWidget.createTrigger);
 
@@ -101,13 +102,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 5:
           ImageFieldWidget imageFieldWidget = ImageFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              null,
-              "",
-              "",
-              true,
-              );
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            null,
+            "",
+            "",
+            true,
+          );
 
           functions.add(imageFieldWidget.createTrigger);
 
@@ -116,13 +117,13 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
 
         case 6:
           DrawFieldWidget drawFieldWidget = DrawFieldWidget(
-              widget.template.tools![i].id,
-              widget.template.tools![i].name,
-              null,
-              "",
-              "",
-              true,
-              );
+            widget.template.tools![i].id,
+            widget.template.tools![i].name,
+            null,
+            "",
+            "",
+            true,
+          );
 
           functions.add(drawFieldWidget.createTrigger);
 
@@ -149,8 +150,19 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               null,
               true,
-              ""
-              );
+              "");
+          functions.add(tickableFieldWidget.createTrigger);
+          templateTools.add(tickableFieldWidget);
+          break;
+        case 9:
+          LikeDislikeCommentWidget tickableFieldWidget =
+              LikeDislikeCommentWidget(
+            widget.template.tools![i].id,
+            null,
+            widget.template.tools![i].name,
+            null,
+            true,
+          );
           functions.add(tickableFieldWidget.createTrigger);
           templateTools.add(tickableFieldWidget);
           break;

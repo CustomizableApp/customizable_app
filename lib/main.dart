@@ -14,9 +14,8 @@ Future<void> main() async {
   );
 
   AuthenticationService.authInit();
-  if(FirebaseAuth.instance.currentUser?.uid != null){
+  if (FirebaseAuth.instance.currentUser?.uid != null) {
     await UserService.instance.getCurrentUser();
-
   }
   runApp(const MyApp());
 }
