@@ -205,7 +205,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                 widget.record.datas![i].name,
                 voteItemList,
                 permissionList[1],
-                isVoted);
+                isVoted,
+                widget.record.id);
 
             functions.add(voteFieldWidget.updateTrigger);
             recordDatas.add(voteFieldWidget);
@@ -225,7 +226,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
                 widget.record.datas![i].fieldId,
                 widget.record.datas![i].name,
                 tickableItemList,
-                permissionList[1]);
+                permissionList[1],
+                widget.record.id);
             functions.add(voteFieldWidget.updateTrigger);
             recordDatas.add(voteFieldWidget);
             break;

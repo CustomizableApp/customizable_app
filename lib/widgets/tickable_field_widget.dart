@@ -1,16 +1,22 @@
+import 'dart:convert';
+
 import 'package:customizable_app/model/tickable_field_item_model.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
+import '../service/auth_service.dart';
+import '../service/user_service.dart';
+
 class TickableFieldWidet extends StatefulWidget {
-  TickableFieldWidet(this.id, this.fieldId, this.name, this.tickableItems,
-    this.isWritable,
+  TickableFieldWidet(
+      this.id, this.fieldId, this.name, this.tickableItems, this.isWritable,this.recordID,
       {Key? key})
       : super(key: key);
   final String id;
   final String name;
+  String recordID;
   String? fieldId;
-  bool isWritable=true;
+  bool isWritable = true;
   List<TickableFieldItemModel>? tickableItems;
   bool hasChanged = false;
   bool isCreated = false;
@@ -51,6 +57,9 @@ class _TickableFieldWidetState extends State<TickableFieldWidet> {
   void initState() {
     widget.tickableItems ??= [];
     super.initState();
+  }
+  Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
   }
 
   Future<void> createNewListItemDialog() async {
@@ -131,9 +140,10 @@ class _TickableFieldWidetState extends State<TickableFieldWidet> {
                             child: Text("Click + button to add new list item"),
                           )
                         : SizedBox(
-                            height: 100,
                             width: 300,
                             child: ListView.builder(
+                                shrinkWrap: true,
+                                primary: false,
                                 padding: const EdgeInsets.all(8),
                                 itemCount: widget.tickableItems!.length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -143,10 +153,37 @@ class _TickableFieldWidetState extends State<TickableFieldWidet> {
                                     children: [
                                       Text(widget.tickableItems![index].text,
                                           style: const TextStyle(fontSize: 20)),
-                                      Text(
-                                          widget.tickableItems![index].ticked
-                                              .toString(),
-                                          style: const TextStyle(fontSize: 20))
+                                      Checkbox(
+                                          value: widget
+                                              .tickableItems![index].ticked,
+                                          onChanged: (bool? value) async {
+                                            if (widget.recordID != "") {
+                                                    await FieldService.instance
+                                                        .createFeedData(
+                                                            jsonEncode(await getUserName(
+                                                                    AuthenticationService
+                                                                        .instance
+                                                                        .getUserId()) +
+                                                                " edited " +
+                                                                widget.name),
+                                                            4,
+                                                            widget.recordID,
+                                                            AuthenticationService
+                                                                .instance
+                                                                .getUserId());
+                                                  }
+                                            await FieldService.instance
+                                                .updateListItem(
+                                                    widget.tickableItems![index]
+                                                        .id,
+                                                    !widget
+                                                        .tickableItems![index]
+                                                        .ticked);
+                                            setState(() {
+                                              widget.tickableItems![index]
+                                                  .ticked = value!;
+                                            });
+                                          }),
                                     ],
                                   );
                                 }),

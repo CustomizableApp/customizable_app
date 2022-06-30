@@ -1,20 +1,26 @@
+import 'dart:convert';
+
 import 'package:customizable_app/model/vote_field_item.dart';
 import 'package:customizable_app/service/auth_service.dart';
 import 'package:customizable_app/service/field_service.dart';
 import 'package:flutter/material.dart';
 
+import '../service/user_service.dart';
+
 class VoteFieldWidget extends StatefulWidget {
   VoteFieldWidget(this.id, this.fieldId, this.name, this.voteItems,
-    this.isWritable,this.isVoted,{Key? key})
+      this.isWritable, this.isVoted, this.recordID,
+      {Key? key})
       : super(key: key);
   final String id;
   final String name;
   String? fieldId;
-  bool isWritable=true;
+  bool isWritable = true;
   List<VoteFieldItemModel>? voteItems;
   bool hasChanged = false;
   bool isCreated = false;
-  bool isVoted=false;
+  String recordID;
+  bool isVoted = false;
 
   @override
   _VoteFieldWidgetState createState() => _VoteFieldWidgetState();
@@ -51,6 +57,9 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
   void initState() {
     widget.voteItems ??= [];
     super.initState();
+  }
+  Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
   }
 
   Future<void> createNewVoteItemDialog() async {
@@ -90,9 +99,7 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
                   voteItem = VoteFieldItemModel(id: "", text: text, count: 0);
                 }
                 widget.voteItems!.add(voteItem);
-                setState(() {
-                  
-                });
+                setState(() {});
                 Navigator.of(context).pop();
               },
             ),
@@ -130,13 +137,13 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
                     widget.voteItems!.isEmpty
                         ? const Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text("Click + button to add new vote item"),
+                            child: Text("There is no vote item"),
                           )
                         : SizedBox(
-                            width: MediaQuery.of(context).size.width*0.95,
+                            width: MediaQuery.of(context).size.width * 0.95,
                             child: ListView.builder(
-                              shrinkWrap: true,
-                              primary: false,
+                                shrinkWrap: true,
+                                primary: false,
                                 padding: const EdgeInsets.all(8),
                                 itemCount: widget.voteItems!.length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -146,36 +153,63 @@ class _VoteFieldWidgetState extends State<VoteFieldWidget> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(widget.voteItems![index].text,
-                                            style: const TextStyle(fontSize: 20)),
-                                            widget.isVoted?Container():
-
-                                            ElevatedButton(
-                                        child: const Text("VOTE"),
-                                        onPressed: ()  async{
-                                          await FieldService.instance.createVoteFieldVoter(AuthenticationService.instance.getUserId(), widget.fieldId!);
-                                          await FieldService.instance.updateVoteItem(widget.voteItems![index].id);
-                                          setState(()  {
-
-                                            widget.voteItems![index].count++;
-                                            widget.isVoted=true;
-                                          });
-                                        }),
+                                            style:
+                                                const TextStyle(fontSize: 20)),
+                                        widget.isVoted
+                                            ? Container()
+                                            : ElevatedButton(
+                                                child: const Text("VOTE"),
+                                                onPressed: () async {
+                                                  if (widget.recordID != "") {
+                                                    await FieldService.instance
+                                                        .createFeedData(
+                                                            jsonEncode(await getUserName(
+                                                                    AuthenticationService
+                                                                        .instance
+                                                                        .getUserId()) +
+                                                                " voted in " +
+                                                                widget.name),
+                                                            4,
+                                                            widget.recordID,
+                                                            AuthenticationService
+                                                                .instance
+                                                                .getUserId());
+                                                  }
+                                                  await FieldService.instance
+                                                      .createVoteFieldVoter(
+                                                          AuthenticationService
+                                                              .instance
+                                                              .getUserId(),
+                                                          widget.fieldId!);
+                                                  await FieldService.instance
+                                                      .updateVoteItem(widget
+                                                          .voteItems![index]
+                                                          .id);
+                                                  setState(() {
+                                                    widget.voteItems![index]
+                                                        .count++;
+                                                    widget.isVoted = true;
+                                                  });
+                                                }),
                                         Text(
                                             widget.voteItems![index].count
                                                 .toString(),
-                                            style: const TextStyle(fontSize: 20))
+                                            style:
+                                                const TextStyle(fontSize: 20))
                                       ],
                                     ),
                                   );
                                 }),
                           ),
-                    IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () async {
-                        await createNewVoteItemDialog();
-                        setState(() {});
-                      },
-                    ),
+                    widget.isWritable
+                        ? IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () async {
+                              await createNewVoteItemDialog();
+                              setState(() {});
+                            },
+                          )
+                        : Container(),
                   ],
                 ),
               ],

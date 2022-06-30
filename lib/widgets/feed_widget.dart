@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:customizable_app/model/feed_data_model.dart';
@@ -21,6 +22,30 @@ class FeedWidget extends StatefulWidget {
 }
 
 class _FeedWidgetState extends State<FeedWidget> {
+  late Timer timer;
+
+  @override
+  void initState(){
+    super.initState();
+    timer =Timer.periodic(Duration(seconds: 1), (Timer t) {
+      setState(() { 
+        fetchFeedData();
+        print("object");
+      });
+    });
+  }
+  @override
+  void dispose(){
+    timer.cancel();
+    super.dispose();
+    
+  }
+  fetchFeedData() async {
+    List<FeedDataModel>? fetchFeedData =
+          await FieldService.instance.getFeedData(widget.recordID);
+          widget.feedData=fetchFeedData;
+  }
+
   Future<String> getUserName(String userID) async {
     return await UserService.instance.getUserNameByID(userID);
   }
@@ -181,7 +206,6 @@ class _FeedWidgetState extends State<FeedWidget> {
                 IconButton(
                     onPressed: () async {
                       if (widget.controller.text != "") {
-                        //TODO CONSTANT USER ID WILL CHANGE
                         DateTime? timeStamp = await FieldService.instance
                             .createFeedData(
                                 jsonEncode(widget.controller.text),

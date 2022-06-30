@@ -173,6 +173,14 @@ class FieldService {
         await Dio().post(AppConstants.apiUrl + "/updateVoteItem", data: data);
   }
 
+  Future<void> updateListItem(String listItemID,bool tick) async {
+    Map<String, dynamic> data = {
+      "list_item_id": listItemID,
+      "ticked":tick
+    };
+        await Dio().post(AppConstants.apiUrl + "/updateListItemTick", data: data);
+  }
+
   Future<String?> createRecord(String name, String templateId) async {
     //TODO CONSTANT VALUE HERE
     String creatorId =

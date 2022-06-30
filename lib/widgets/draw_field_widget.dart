@@ -62,8 +62,9 @@ class DrawFieldWidget extends StatefulWidget {
   updateData(String fieldId) async {
     var jsonObject = jsonEncode(base64String);
     await FieldService.instance.updateDrawFieldData(fieldId, jsonObject);
-    if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
+    if (recordID != "") {
+      await FieldService.instance.createFeedData(
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, AuthenticationService.instance.getUserId());
     }
   }
 }
@@ -128,6 +129,7 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                                 );
                               }
                             }),
+                            widget.isWritable?
                             ElevatedButton(
                                       child: const Text("RESET"),
                                       onPressed: ()  {
@@ -135,23 +137,24 @@ class _DrawFieldWidgetState extends State<DrawFieldWidget> {
                                           widget.base64String="";
                                           widget.isDrawPadOpen=true;
                                         });
-                                      }),
+                                      }):Container(),
                       ],
                     )
                     : !widget.isDrawPadOpen
                         ? Column(
                             children: [
-                              const Text("To draw click 'DRAW' button."),
+                              const Text("There is no drawing yet."),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  widget.isWritable?
                                   ElevatedButton(
                                       onPressed: () {
                                         setState(() {
                                           widget.isDrawPadOpen = true;
                                         });
                                       },
-                                      child: const Text("DRAW")),
+                                      child: const Text("DRAW")):Container(),
                                 ],
                               ),
                             ],

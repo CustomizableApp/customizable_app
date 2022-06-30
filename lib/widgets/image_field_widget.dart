@@ -69,8 +69,9 @@ class ImageFieldWidget extends StatefulWidget {
   updateData(String fieldId) async {
     var jsonObject=jsonEncode(base64String);
     await FieldService.instance.updateImageFieldData(fieldId, jsonObject);
-    if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
+    if (recordID != "") {
+      await FieldService.instance.createFeedData(
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, AuthenticationService.instance.getUserId());
     }
   }
 }
@@ -155,6 +156,7 @@ final ImagePicker imgpicker = ImagePicker();
                     Container( 
                       child: Text("No Image selected."),
                     ),
+                    widget.isWritable?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -168,12 +170,13 @@ final ImagePicker imgpicker = ImagePicker();
                           onPressed: (){
                               setState(() {
                                 imagepath="";
+                                widget.base64String="";
                               });
                           }, 
                           child: Text("Cancel")
                         ):Container(),
                       ],
-                    ),
+                    ):Container(),
                ]
              ),
          )

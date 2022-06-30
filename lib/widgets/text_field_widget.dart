@@ -56,10 +56,9 @@ class TextFieldWidget extends StatefulWidget {
 
   Future<void> updateData(String fieldId) async {
     await FieldService.instance.updateTextFieldData(fieldId, controller.text);
-    //TODO CONSTANT USER ID
     if (recordID != "") {
       await FieldService.instance.createFeedData(
-          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, "sehaId");
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, AuthenticationService.instance.getUserId());
     }
   }
   Future<String> getUserName(String userID) async {

@@ -56,8 +56,9 @@ class CounterFieldWidget extends StatefulWidget {
 
   updateData(String fieldId) async {
     await FieldService.instance.updateCounterFieldData(fieldId, counter);
-    if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
+    if (recordID != "") {
+      await FieldService.instance.createFeedData(
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, AuthenticationService.instance.getUserId());
     }
   }
    Future<String> getUserName(String userID) async {
@@ -89,6 +90,7 @@ class _CounterFieldWidgetState extends State<CounterFieldWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                widget.isWritable?
                 IconButton(
                     onPressed: () {
                       setState(() {
@@ -97,15 +99,20 @@ class _CounterFieldWidgetState extends State<CounterFieldWidget> {
                         }
                       });
                     },
-                    icon: const Icon(Icons.remove)),
-                Text(widget.counter.toString()),
+                    icon: const Icon(Icons.remove)):Container(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(widget.counter.toString()),
+                ),
+                widget.isWritable?
                 IconButton(
                     onPressed: () {
                       setState(() {
                         widget.counter++;
                       });
                     },
-                    icon: const Icon(Icons.add)),
+                    icon: const Icon(Icons.add)):
+                    Container(),
               ],
             ),
           )

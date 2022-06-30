@@ -136,7 +136,8 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               null,
               true,
-              false);
+              false,
+              "");
 
           functions.add(voteFieldWidget.createTrigger);
           templateTools.add(voteFieldWidget);
@@ -148,6 +149,7 @@ class _CreateRecordPageState extends State<CreateRecordPage> {
               widget.template.tools![i].name,
               null,
               true,
+              ""
               );
           functions.add(tickableFieldWidget.createTrigger);
           templateTools.add(tickableFieldWidget);

@@ -60,8 +60,9 @@ class DateIntervalWidget extends StatefulWidget {
   updateData(String fieldId) async {
     await FieldService.instance
         .updateIntervalDateFieldData(fieldId, firstDate, secondDate);
-        if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
+       if (recordID != "") {
+      await FieldService.instance.createFeedData(
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, AuthenticationService.instance.getUserId());
     }
   }
    Future<String> getUserName(String userID) async {
@@ -96,6 +97,7 @@ class _DateIntervalWidgetState extends State<DateIntervalWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                widget.isWritable?
                 Flexible(
                   child: GestureDetector(
                       onTap: () {
@@ -123,9 +125,12 @@ class _DateIntervalWidgetState extends State<DateIntervalWidget> {
                       child: Card(
                           child:
                               Text(DateFormat.yMd().format(widget.firstDate)))),
-                ),
+                ):Card(
+                          child:
+                              Text(DateFormat.yMd().format(widget.firstDate))),
                 Text(daysBetween(widget.firstDate, widget.secondDate)
                     .toString()),
+                    widget.isWritable?
                 Flexible(
                   child: GestureDetector(
                       onTap: () {
@@ -153,7 +158,9 @@ class _DateIntervalWidgetState extends State<DateIntervalWidget> {
                       child: Card(
                           child: Text(
                               DateFormat.yMd().format(widget.secondDate)))),
-                ),
+                ):Card(
+                          child: Text(
+                              DateFormat.yMd().format(widget.secondDate))),
               ],
             ),
           ),

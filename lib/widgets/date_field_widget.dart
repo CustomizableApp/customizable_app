@@ -54,8 +54,9 @@ class DateFieldWidget extends StatefulWidget {
 
   updateData(String fieldId) async {
     await FieldService.instance.updateDateFieldData(fieldId, date);
-    if(recordID!=""){
-      await FieldService.instance.createFeedData(jsonEncode(AuthenticationService.instance.getUserId()+" edited "+ name), 4, recordID, "sehaId");
+    if (recordID != "") {
+      await FieldService.instance.createFeedData(
+          jsonEncode(await getUserName(AuthenticationService.instance.getUserId()) + " edited " + name), 4, recordID, AuthenticationService.instance.getUserId());
     }
   }
    Future<String> getUserName(String userID) async {
@@ -90,6 +91,7 @@ class _DateFieldWidgetState extends State<DateFieldWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                widget.isWritable?
                 Flexible(
                   child: GestureDetector(
                       onTap: () {
@@ -114,7 +116,8 @@ class _DateFieldWidgetState extends State<DateFieldWidget> {
                       },
                       child: Card(
                           child: Text(DateFormat.yMd().format(widget.date)))),
-                ),
+                ):Card(
+                          child: Text(DateFormat.yMd().format(widget.date))),
               ],
             ),
           ),
