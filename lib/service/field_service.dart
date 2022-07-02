@@ -604,6 +604,62 @@ class FieldService {
     return response.statusCode;
   }
 
+  Future<int?> updateLikeAndDislike(String fieldID, int incLike,int incDislike) async {
+    Map<String, dynamic> data = {
+      "l_c_d_id": fieldID,
+      "like": incLike,
+      "dislike": incDislike,
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/updateLikeAndDislike", data: data);
+
+    return response.statusCode;
+  }
+  Future<int?> updateLCDItem(String fieldID, bool isLiked,String userID) async {
+    Map<String, dynamic> data = {
+      "l_c_d_f_id": fieldID,
+      "is_liked":isLiked,
+      "user_id":userID,
+    };
+
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/updateLCDItem", data: data);
+
+    return response.statusCode;
+  }
+
+  Future<List<bool>> getIsLCDInteracted(String fieldID,String userID) async {
+    Map<String, dynamic> data = {
+      "l_c_d_f_id": fieldID,
+      "user_id":userID,
+    };
+    List<bool> interactionList=List.empty(growable: true);
+    interactionList.add(false);
+    interactionList.add(false);
+    Response response = await Dio().get(
+        AppConstants.apiUrl + "/getIsLCDInteracted",
+        queryParameters: data);
+    Map<String, dynamic> dataMap = response.data;
+    List dataList=dataMap["DB_like_dislike_item"];
+    if(dataList.isEmpty){
+      return interactionList;
+    }else{
+      interactionList[0]=true;
+      interactionList[1]= dataList[0]["is_liked"];
+      return interactionList;
+    }
+  }
+  Future<void> createLCDItem(String fieldID, bool isLiked,String userID) async {
+    Map<String, dynamic> data = {
+      "l_c_d_f_id": fieldID,
+      "is_liked":isLiked,
+      "user_id":userID,
+    };
+    Response response =
+        await Dio().post(AppConstants.apiUrl + "/createLCDItem", data: data);
+  }
+
   Future<List<FeedDataModel>> getFeedData(String recordID) async {
     Map<String, dynamic> data = {
       "record_id": recordID,

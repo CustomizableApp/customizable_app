@@ -243,6 +243,7 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
           List<bool> permissionList =
               await checkReadAndWrite(widget.record.datas![i].id);
           if (permissionList[0]) {
+            List<bool> interactionList= await FieldService.instance.getIsLCDInteracted(widget.record.datas![i].fieldId, AuthenticationService.instance.getUserId());
             LikeDislikeCommentItemModel likeDislikeCommentItems =
                 await FieldService.instance
                     .getLikeDislikeCommentData(widget.record.datas![i].fieldId);
@@ -253,6 +254,8 @@ class _ShowRecordPageState extends State<ShowRecordPage> {
               widget.record.datas![i].name,
               likeDislikeCommentItems,
               permissionList[1],
+              interactionList[0],
+              interactionList[1]
             );
             functions.add(likeDislikeCommentWidget.updateTrigger);
             recordDatas.add(likeDislikeCommentWidget);

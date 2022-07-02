@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class LikeDislikeCommentWidget extends StatefulWidget {
   LikeDislikeCommentWidget(this.id, this.fieldId, this.name,
-      this.likeDislikeCommentItems, this.isWritable,
+      this.likeDislikeCommentItems, this.isWritable,this.isInteracted, this.isLiked,
       {Key? key})
       : super(key: key);
   final String id;
@@ -14,6 +14,8 @@ class LikeDislikeCommentWidget extends StatefulWidget {
   String? fieldId;
   bool isWritable = true;
   LikeDislikeCommentItemModel? likeDislikeCommentItems;
+  bool isInteracted = false;
+  bool isLiked = false;
   bool hasChanged = false;
   bool isCreated = false;
 
@@ -91,7 +93,31 @@ class _LikeDislikeCommentWidgetState extends State<LikeDislikeCommentWidget> {
                           )),
                     ),
                     IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.arrow_upward)),
+                        onPressed: () async {
+                          if (widget.isInteracted) {
+                            if (widget.isLiked) {
+                            } else {
+                              await FieldService.instance.updateLCDItem(widget.fieldId!, true, AuthenticationService.instance.getUserId());
+                              await FieldService.instance
+                                  .updateLikeAndDislike(widget.fieldId!, 1, -1);
+                              setState(() {
+                                widget.isLiked = true;
+                                widget.likeDislikeCommentItems!.like++;
+                                widget.likeDislikeCommentItems!.dislike--;
+                              });
+                            }
+                          } else {
+                            await FieldService.instance.createLCDItem(widget.fieldId!, true, AuthenticationService.instance.getUserId());
+                            await FieldService.instance
+                                .updateLikeAndDislike(widget.fieldId!, 1, 0);
+                            setState(() {
+                              widget.isInteracted=true;
+                              widget.isLiked = true;
+                              widget.likeDislikeCommentItems!.like++;
+                            });
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_upward)),
                     IconButton(
                         onPressed: () {
                           setState(() {
@@ -100,7 +126,30 @@ class _LikeDislikeCommentWidgetState extends State<LikeDislikeCommentWidget> {
                         },
                         icon: const Icon(Icons.comment)),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (widget.isInteracted) {
+                            if (!widget.isLiked) {
+                            } else {
+                              await FieldService.instance.updateLCDItem(widget.fieldId!, false, AuthenticationService.instance.getUserId());
+                              await FieldService.instance
+                                  .updateLikeAndDislike(widget.fieldId!, -1, 1);
+                              setState(() {
+                                widget.isLiked = false;
+                                widget.likeDislikeCommentItems!.like--;
+                                widget.likeDislikeCommentItems!.dislike++;
+                              });
+                            }
+                          } else {
+                            await FieldService.instance.createLCDItem(widget.fieldId!, false, AuthenticationService.instance.getUserId());
+                            await FieldService.instance
+                                .updateLikeAndDislike(widget.fieldId!, 0, 1);
+                            setState(() {
+                              widget.isInteracted=true;
+                              widget.isLiked = false;
+                              widget.likeDislikeCommentItems!.dislike++;
+                            });
+                          }
+                        },
                         icon: const Icon(Icons.arrow_downward)),
                     Container(
                       color: Colors.transparent,
