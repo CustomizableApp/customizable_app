@@ -79,7 +79,7 @@ class _FeedWidgetState extends State<FeedWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0)+const EdgeInsets.only(right:15.0),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(),

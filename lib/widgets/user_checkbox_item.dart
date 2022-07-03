@@ -18,11 +18,16 @@ class UserCheckboxItem extends StatefulWidget {
   String roleId;
   String recordId;
 
+  
+
   @override
   _UserCheckboxItemState createState() => _UserCheckboxItemState();
 }
 
 class _UserCheckboxItemState extends State<UserCheckboxItem> {
+   Future<String> getUserName(String userID) async {
+    return await UserService.instance.getUserNameByID(userID);
+  }
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -41,7 +46,7 @@ class _UserCheckboxItemState extends State<UserCheckboxItem> {
                     if (widget.recordId != "") {
                       await FieldService.instance.createFeedData(
                           jsonEncode(
-                              AuthenticationService.instance.getUserId() +
+                              await getUserName(AuthenticationService.instance.getUserId()) +
                                   " assigned " +
                                   widget.user.name! +
                                   " to role x"),
@@ -60,7 +65,7 @@ class _UserCheckboxItemState extends State<UserCheckboxItem> {
                     if (widget.recordId != "") {
                       await FieldService.instance.createFeedData(
                           jsonEncode(
-                              AuthenticationService.instance.getUserId() +
+                              await getUserName(AuthenticationService.instance.getUserId()) +
                                   " unassigned " +
                                   widget.user.name! +
                                   " from role x"),

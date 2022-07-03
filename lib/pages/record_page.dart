@@ -23,6 +23,11 @@ class _RecordPageState extends State<RecordPage> {
       appBar: AppBar(
         title:Text(widget.template.name),
         actions: [
+          IconButton(onPressed: (){
+          setState(() {
+            
+          });
+        }, icon: Icon(Icons.refresh)),
           UserService.instance.currentUser!.type==0?Container():
           IconButton(
               onPressed: () {
