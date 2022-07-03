@@ -37,6 +37,11 @@ class _TemplatePageState extends State<TemplatePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home Page"),
+        actions: [IconButton(onPressed: (){
+          setState(() {
+            
+          });
+        }, icon: Icon(Icons.refresh))],
         centerTitle: true,
       ),
       body: Center(
